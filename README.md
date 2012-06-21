@@ -105,21 +105,19 @@ struct A
   int y;
 };
 
-struct A_json_model : public json::model<A>
+namespace json
 {
 
-  // We call the super constructor with a list of JSON fields to be mapped to
-  // fields of the class A.
-  A_json_model():
-    json::model<A>
-    (
-    json::field("x", &A::x),
-    json::field("y", &B::y)
-    )
+  namespace models
+  {
+    
+    // This is a descriptor of how to translate from and to JSON on instances of A.
+    const model<A> A { make_model(field("x", &A::x),
+                                  field("y", &A::y)) };
+  
+  }
 
-};
-
-static const A_json_model model;
+}
 
 int main()
 {
@@ -127,11 +125,11 @@ int main()
   
   // Inserts the model in the input pipeline to read a JSON object and flush it into
   // the instance of A.
-  std::cin >> model >> a;
+  std::cin >> json::modesl::A >> a;
   
   // Inserts the model in the output pipeline to create a JSON representation of the
   // instance of A and write it to the stream.
-  std::cout << model << a << std::endl;
+  std::cout << json::models::A << a << std::endl;
   
   return 0;
 }
