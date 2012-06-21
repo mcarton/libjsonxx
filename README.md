@@ -3,10 +3,10 @@ libjson++
 
 C++11 JSON library.
 
-1. Compilation
-2. Building JSON objects
-3. Reading JSON objects
-4. Writing JSON objects
+- Compilation
+- Building JSON objects
+- Reading JSON objects
+- Writing JSON objects
 
 Compilation
 -----------
