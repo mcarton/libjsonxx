@@ -108,7 +108,7 @@ struct A
 struct A_json_model : public json::model<A>
 {
 
-  // We cann the super constructor with a list of JSON fields to be mapped to
+  // We call the super constructor with a list of JSON fields to be mapped to
   // fields of the class A.
   A_json_model():
     json::model<A>
