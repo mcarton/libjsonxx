@@ -89,6 +89,53 @@ int main()
 }
 ```
 
+Using JSON models
+-----------------
+
+JSON is a string format, C++ has strings but also has integers and floats.
+While libjson++ tries to provide as mainy functions as it can for parsing JSON objects it may be annoying and error prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes and instead want to use more expressive classes.
+libjson++ provides the 'model' concept to solve this problem, a model is an object discribing how to transform a JSON object into a C++ object and vice-versa.
+```c++
+#include <iostream>
+#include "json/model.h"
+
+struct A
+{
+  int x;
+  int y;
+};
+
+struct A_json_model : public json::model<A>
+{
+
+  // We cann the super constructor with a list of JSON fields to be mapped to
+  // fields of the class A.
+  A_json_model():
+    json::model<A>
+    (
+    json::field("x", &A::x),
+    json::field("y", &B::y)
+    )
+
+};
+
+static const A_json_model model;
+
+int main()
+{
+  A a;
+  
+  // Inserts the model in the input pipeline to read a JSON object and flush it into
+  // the instance of A.
+  std::cin >> model >> a;
+  
+  // Inserts the model in the output pipeline to create a JSON representation of the
+  // instance of A and write it to the stream.
+  std::cout << model << a << std::endl;
+  
+  return 0;
+}
+
 Using a custom memory allocator
 -------------------------------
 
