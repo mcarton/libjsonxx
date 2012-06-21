@@ -9,8 +9,8 @@ Compilation
 libjson++ uses CMake to handle compilation, you can get CMake from this URL: http://www.cmake.org/
 On UNIX systems the compilation will be something like:
 
-  $ cmake .
-  $ make
+    $ cmake .
+    $ make
 
 On Windows systems you'll have to generate the Visual Studio project using CMake and then compile libjson++ using MSVC.
 
