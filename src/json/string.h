@@ -99,7 +99,7 @@ namespace json
     if (__is_neg(x))
       {
 	s.push_back('-');
-	s.push_back(__mod_10(x) + '0');
+	s.push_back(int(__mod_10(x)) + '0');
 	x = __div_10(x);
       }
     __int_to_str(x, s);
