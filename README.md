@@ -76,7 +76,7 @@ int main()
   obj[0]["Hello"] = "World";
   obj[0]["Answer"] = 42;
   
-  // Writing the JSON object to stdout, prints {"Hello":"World","Answer":42}
+  // Writing the JSON object to stdout, prints [{"Hello":"World","Answer":42}]
   std::cout << obj << std::endl;
   
   return 0;
