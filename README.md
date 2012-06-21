@@ -3,6 +3,9 @@ libjson++
 
 C++11 JSON library.
 
+libjson++ provides the implementation of classes and functions to deal read and write JSON objects in C++.
+It's written in a STL-style and is thought to integrate to the standard library.
+
 Compilation
 -----------
 
@@ -78,6 +81,32 @@ int main()
   
   // Writing the JSON object to stdout, prints [{"Hello":"World","Answer":42}]
   std::cout << obj << std::endl;
+  
+  return 0;
+}
+```
+
+Using a custom memory allocator
+-------------------------------
+
+Sometimes one needs to provide one's own memory allocator, libjson++ uses the same design as the STL to solve this problem, the json::object class is actually a typedef to a template class which makes it easy to customize the memory allocator to be used by the object.
+```c++
+#include "json/object.h"
+
+template < typename T >
+class json_allocator
+{
+  // ...
+};
+
+int main()
+{
+  typedef json::basic_object< char, std::char_traits<char>, json_allocator<char> > json_object;
+  
+  json_allocator a;
+  json_object obj { a };
+  
+  obj = "Storage for this string will be created by the custom allocator";
   
   return 0;
 }
