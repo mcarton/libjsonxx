@@ -113,6 +113,8 @@ target_link_libraries(example-reader json++-static)
 add_executable(example-iterator ${JSON_EXAMPLES_DIR}/iterator.cpp)
 target_link_libraries(example-iterator json++-static)
 
-
 add_executable(example-test ${JSON_EXAMPLES_DIR}/test.cpp)
 target_link_libraries(example-test json++-static)
+
+add_executable(example-model ${JSON_EXAMPLES_DIR}/model.cpp)
+target_link_libraries(example-model json++-static)

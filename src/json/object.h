@@ -304,6 +304,15 @@ namespace json
       (*this) = x;
     }
 
+    basic_object(const double x,
+		 const allocator_type &a = allocator_type()):
+      _allocator(a),
+      _type(type_null),
+      _body()
+    {
+      (*this) = x;
+    }
+
     ~basic_object()
     {
       clear();
@@ -365,6 +374,16 @@ namespace json
       _type = type_string;
       return *this;
     }
+
+    /*
+    basic_object &operator=(const double x)
+    {
+      object_string s ( to_string<char_type, traits_type>(x, _allocator) );
+      _body.assign_string(_type, std::move(s), _allocator);
+      _type = type_string;
+      return *this;
+    }
+    */
 
     basic_object &operator[](const size_type index)
     {
