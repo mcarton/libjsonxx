@@ -40,18 +40,29 @@ namespace json
   /**
    * @brief A generic hash map optimized for string keys.
    *
-   * @note
-   * <p>
    * C++ provides two mapping object in the standard library, <em>std::map</em>
    * and <em>std::unordered_map</em> but there is multiple issues with those
    * objects:
    * <ul>
    *  <li>When used with <em>std::string</em> as key the program performs a
-   *  memory allocation everytime it uses the '[]' operator.</li>
+   *  memory allocation everytime it uses the '[]' operator, this is kind of
+   *  sad and not matching the <em>"you don't pay for what you don't use"</em>
+   *  spirit of C++.</li>
    *  <li><em>std::unordered_map</em> would refuse to compile in the case of
-   *  the implementation of a JSON object because of recursive types.</li>
+   *  the implementation of a JSON object because of recursive types (the JSON
+   *  object class containing a map of other JSON objects). I'm not sure if
+   *  that's only failing with GCC but the code has to be portable for multiple
+   *  compilers anyway.</li>
    * </ul>
-   * </p>
+   * <br/>
+   * The intent of this class is not to provide a replacement for <em>std::map</em>
+   * or <em>std::unordered_map</em>, it is to provide a hash map implementation
+   * that fits the needs to build the <em>json::object</em> class. The class API
+   * is then not exactly the same as the one of the STL maps, it's similar but
+   * simplier.
+   *
+   * @note This class is developped for internal purposes only and should not be
+   * used outside of the libjson++ implementation.
    */
   template < typename T,
 	     typename Char = char,

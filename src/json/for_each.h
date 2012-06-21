@@ -25,6 +25,12 @@
 namespace json
 {
 
+  /**
+   * @brief Iterates over a JSON list.
+   *
+   * @param obj      The object to iterate on.
+   * @param function The function to be called on each objects of the list.
+   */
   template < typename Object, typename Function >
   inline void for_each_object(Object &obj, const Function &function)
   {
@@ -37,6 +43,15 @@ namespace json
       }
   }
 
+  /**
+   * @brief Iterates over a JSON map.
+   *
+   * @param obj      The object to iterate on.
+   * @param function The function called with the name and value of each
+   * elements of the map - so it has to receive two parameters, the first
+   * one being a <em>json::char_sequence</em> and the second a
+   * <em>json::object</em>.
+   */
   template < typename Object, typename Function >
   inline void for_each_pair(Object &obj, const Function &function)
   {

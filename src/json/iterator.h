@@ -29,6 +29,74 @@ namespace json
 
   void error_null_iterator_cannot_be_incremented();
 
+  /**
+   * @brief This class provides the implementation of an object that is returned
+   * by a call to <em>json::object::begin</em> and <em>json::object::end</em>.
+   *
+   * JSON objects can be iterated when they are lists or maps but the iterator is
+   * intended to be used slightly differently in those two cases.
+   * <br/>
+   * <br/>
+   * <strong>Structure of a JSON iterator:</strong>
+   * JSON iterators point to objects that can be used as STL pairs (providing
+   * <em>first</em> and <em>last</em> fields) which can also be implicitly cast
+   * to a <em>json::object</em>. This is the most flexible way that was found to
+   * represent the fact that we may be iterating over two different type of objects
+   * in C++.
+   * <br/>
+   * Because of this design it requires some knowledge on how to use it.
+   * <br/>
+   * <br/>
+   * <strong>Iterating over a JSON list:</strong>
+   * <br/>
+   * When iterating over a JSON list we can dereference the iterator to obtain a
+   * reference to an iterator's internal object that can then be implicitly cast
+   * to a JSON object.
+   * @code
+   * json::object obj;
+   *
+   * // ...
+   *
+   * auto it = obj.begin();
+   * auto it = obj.end();
+   *
+   * while (it != jt)
+   *   {
+   *     json::object &x = *it; // Implicit cast of the deferenced iterator.
+   *     
+   *     // This is invalid, we can't access the JSON object directly from the
+   *     // iterator using the '->' operator.
+   *     //
+   *     // int n = it->size();
+   *     
+   *     ++it;
+   *   }
+   * @endcode
+   * <br/>
+   * <br/>
+   * <strong>Iterating over a JSON map:</strong>
+   * <br/>
+   * When iterating over a JSON map we can dereference the iterator to acess the
+   * name and value of the current pair, just the way we'd do it with a STL map.
+   * @code
+   * json::object obj;
+   *
+   * // ...
+   *
+   * auto it = obj.begin();
+   * auto it = obj.end();
+   *
+   * while (it != jt)
+   *   {
+   *     const json::char_sequence &key = it->first;
+   *     const json::object &value = it->second;
+   *     
+   *     // ...
+   *     
+   *     ++it;
+   *   }
+   * @endcode
+   */
   template < typename Object,
 	     typename ListIterator,
 	     typename MapIterator >

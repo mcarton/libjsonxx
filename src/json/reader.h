@@ -267,6 +267,15 @@ namespace json
     read_object<decltype(beg), Char, Traits, Allocator>(beg, end, obj);
   }
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param iterable An 'Iterable' object that must feed the parser with a valid
+   * JSON string.
+   * @param a The allocator to use to create the object.
+   * 
+   * @return The function returns the newly created JSON object.
+   */
   template < typename Iterable,
              typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
   inline Object read(Iterable &iterable, typename Object::allocator_type const &a)
@@ -279,6 +288,14 @@ namespace json
     return obj;
   }
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param iterable An 'Iterable' object that must feed the parser with a valid
+   * JSON string.
+   * 
+   * @return The function returns the newly created JSON object.
+   */
   template < typename Iterable,
              typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
   inline Object read(Iterable &iterable)
@@ -287,6 +304,14 @@ namespace json
     return read<Iterable, Object>(iterable, allocator());
   }
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to parse to create a JSON object.
+   * @param a   The allocator that will be used to create the JSON object.
+   *
+   * @return The function returns the newly created JSON object.
+   */
   template < typename Object >
   inline Object read(const char *str, typename Object::allocator_type const &a)
   {
@@ -295,24 +320,52 @@ namespace json
     return read(cs, a);
   }
 
-  template < typename Object >
-  inline Object read(const char *str)
-  {
-    const char_sequence cs ( str, std::strlen(str) );
-    return read(cs);
-  }
-
   void read_object(std::istream &in,
                    basic_object< char, std::char_traits<char>, std::allocator<char> > &obj);
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to read the JSON object from.
+   *
+   * @return The function returns the newly created instance of <em>json::object</em>.
+   */
   basic_object< char, std::char_traits<char>, std::allocator<char> > read(const char *str);
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to read the JSON object from.
+   *
+   * @return The function returns the newly created instance of <em>json::object</em>.
+   */
   basic_object< char, std::char_traits<char>, std::allocator<char> > read(const char_sequence &str);
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to read the JSON object from.
+   *
+   * @return The function returns the newly created instance of <em>json::object</em>.
+   */
   basic_object< char, std::char_traits<char>, std::allocator<char> > read(const std::string &str);
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to read the JSON object from.
+   *
+   * @return The function returns the newly created instance of <em>json::object</em>.
+   */
   basic_object< char, std::char_traits<char>, std::allocator<char> > read(char_sequence &str);
 
+  /**
+   * @brief Reads a JSON object.
+   *
+   * @param str The string to read the JSON object from.
+   *
+   * @return The function returns the newly created instance of <em>json::object</em>.
+   */
   basic_object< char, std::char_traits<char>, std::allocator<char> > read(std::string &str);
 
 }

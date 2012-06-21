@@ -68,7 +68,6 @@ namespace json
   /**
    * @brief An object provided read-only operations on character strings.
    *
-   * <p>
    * In a lot of cases, read-only string operations are required but the STL
    * would require us dynamically allocate memory for a <em>std::string</em>
    * object even if all operations are performed in the scope on constant
@@ -78,7 +77,42 @@ namespace json
    * To avoid this problem, libjson++ provides the <em>json::char_sequence</em>
    * type which can be constructed from c-style strings or STL strings and
    * implements read-only operations on those objects.
-   * </p>
+   * <br/>
+   * <br/>
+   * A common use of of <em>json::char_sequence</em> objects are to implement
+   * comparisons using standard operators between objects that otherwise
+   * couldn't be used this way.
+   * <br/>
+   * For exemple, if we wanted to compare two c-string, we'd have to use the
+   * <em>std::strcmp</em> function, so when writing templates we'd need to
+   * provide a specialization in case of c-string parameters. Using the
+   * <em>json::char_sequence</em> class we could write something like this:
+   * @code
+   * template < typename T, typename U >
+   * void f(const T &t, const U &u)
+   * {
+   *   // ...
+   *
+   *   // All we need to provide is a way to cast the T and U types to
+   *   // json::char_sequence.
+   *   const json::char_sequence s1 { t };
+   *   const json::char_sequence s2 { u };
+   *
+   *   // Now we can treat the input parameters as strings without worrying to
+   *   // provide specializations for objects that don't behave like STL strings.
+   *   const bool equals { s1 == s2 };
+   *
+   *   // ...
+   * }
+   *
+   * // We can now use the template function with any kind of input that could
+   * // be converted to a json::char_sequence.
+   * f(std::string("Hello"), std::string("World"));
+   * f("Hello", "World");
+   * @endcode
+   *
+   * @note This class is developped for internal purposes only and should not be
+   * used outside of the libjson++ implementation.
    */
   template < typename Char, typename Traits = std::char_traits<Char> >
   class basic_char_sequence

@@ -46,6 +46,9 @@ namespace json
     
   }
 
+  // If we have recursive structures (like A containing a map of other A objects)
+  // we need to override this operator in order to make parsing possible.
+  
   void operator<<(A &a, const object &obj)
   {
     models::A.load(a, obj);
@@ -58,6 +61,24 @@ namespace json
 
 }
 
+namespace std
+{
+
+  // We override the stream operators then anytime we read an object A from a
+  // or write one to a stream se use the JSON model.
+
+  istream &operator>>(istream &in, A &a)
+  {
+    return in >> json::models::A >> a;
+  }
+
+  ostream &operator<<(ostream &out, const A &a)
+  {
+    return out << json::models::A << a;
+  }
+
+}
+
 int main()
 {
   A a;
@@ -65,9 +86,9 @@ int main()
   std::stringstream s;
   s.str("{\"x\":42,\"y\":0,\"name\":\"Achille\",\"objects\":[1,2,3,4],\"dict\":{\"Hello\":{}}}");
 
-  s >> json::models::A >> a;
-
-  std::cout << json::models::A << a << std::endl;
+  // Now this is using JSON parsing and formatting, how sexy?
+  s >> a;
+  std::cout << a << std::endl;
 
   return 0;
 }

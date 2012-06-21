@@ -43,6 +43,9 @@ namespace std
 namespace json
 {
 
+  // Overloading of the '<<' operator to provide a way to transform a JSON
+  // object into C++ types.
+
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(short &field, const basic_object<Char, Traits, Allocator> &obj)
   {
@@ -213,6 +216,9 @@ namespace json
   {
     __load_map(field, obj);
   }
+
+  // Overloading of the '>>' operator to provide a way to build JSON objects
+  // from C++ types.
 
   template < typename T, typename Char, typename Traits, typename Allocator >
   inline void operator>>(const T &field, basic_object<Char, Traits, Allocator> &obj)
@@ -428,6 +434,17 @@ namespace json
 
   };
 
+  /**
+   * @brief Creates a mapping between JSON names and C++ class fields.
+   *
+   * @param name The name of a JSON field that will be mapped to a class member.
+   * @param member A pointer to class memory to be mapped to the given JSON name.
+   *
+   * @return The function returns an object that can be used in a call to
+   * <em>json::make_model</em>
+   *
+   * @see json::make_model
+   */
   template < typename Class, typename Field >
   inline class_field<Class, Field Class::*> field(const char *name, Field Class::*member)
   {
@@ -447,6 +464,19 @@ namespace json
     static_for_each(function, std::forward<Args>(args)...);
   }
 
+  /**
+   * @brief A model contains information on how to convert a JSON object to a
+   * C++ type and vice-versa.
+   *
+   * Models are useful to automate serialization and deserialization of JSON
+   * objects.
+   * <br/>
+   * Instead of writing the code to manually parse and format JSON from / to
+   * strings or streams we can create a JSON model and teach it how to build
+   * a C++ object.
+   *
+   * @see json::make_model
+   */
   template < typename Class,
              typename Char = char,
              typename Traits = std::char_traits<Char>,
@@ -608,6 +638,21 @@ namespace json
 
   };
 
+  /**
+   * @brief Creates a <em>json::model</em> out of a list of fields.
+   *
+   * @param field0 An object obtained by a call to the <em>json::field</em>
+   * function which represents a mapping between a JSON name and the field of
+   * a C++ class.
+   * @param fields More fields (optional), they all should be the result to a
+   * call to the <em>json::field</em> function.
+   *
+   * @return The function returns an instance of <em>json::model</em> templated
+   * on the class type it contains pointer to fields of.
+   *
+   * @see json::field
+   * @see json::model
+   */
   template < typename Class,
              typename Field,
              typename... Fields >

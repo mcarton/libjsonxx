@@ -25,6 +25,10 @@
 namespace json
 {
 
+  /**
+   * @brief This enumeration provides a numeric representation of all types a
+   * JSON object may have.
+   */
   enum object_type
     {
       type_null,

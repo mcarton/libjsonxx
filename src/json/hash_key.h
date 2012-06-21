@@ -51,6 +51,21 @@ namespace json
     return h;
   }
 
+  /**
+   * @brief Instances of this class are used as keys for json::hash_map.
+   *
+   * Because of limitations of the STL we had to provide a custom implementation
+   * of a hash map, this class represents the keys of the hash map.
+   * <br/>
+   * Keys are read-only parameters, there's no point allocating memory everytime
+   * we want to look-up for an element (even if that's the design of STL maps
+   * using STL strings as key type). The <em>json::hash_key</em> class inherits
+   * from <em>json::char_sequence</em> and adds auto-computation and caching of
+   * hash values on top of that.
+   *
+   * @note This class is developped for internal purposes only and should not be
+   * used outside of the libjson++ implementation.
+   */
   template < typename Char, typename Traits = std::char_traits<Char> >
   class hash_key : public basic_char_sequence<Char, Traits>
   {

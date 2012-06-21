@@ -46,7 +46,8 @@ namespace json
 
   object read(const char *str)
   {
-    return read<object>(str);
+    const char_sequence cs ( str, std::strlen(str) );
+    return read(str);
   }
 
   object read(const char_sequence &str)
