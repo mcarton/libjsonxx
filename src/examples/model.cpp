@@ -26,28 +26,26 @@ struct A
   int y;
 };
 
-struct A_json_model : public json::model<A>
+namespace json
 {
 
-  A_json_model():
-    json::model<A>
-    (
-     json::field("x", &A::x),
-     json::field("y", &A::y)
-     )
+  namespace models
   {
+
+    const model<A> A ( json::make_model(json::field("x", &A::x),
+                                        json::field("y", &A::y)) );
+    
   }
 
-};
+}
 
 int main()
 {
-  A_json_model model;
   A a;
 
-  std::cin >> model >> a;
+  std::cin >> json::models::A >> a;
 
-  std::cout << model << a << std::endl;
+  std::cout << json::models::A << a << std::endl;
 
   return 0;
 }

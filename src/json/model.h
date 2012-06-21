@@ -219,7 +219,7 @@ namespace json
       }
 
       template < typename Field >
-      void operator()(const Field &f) const
+      void operator()(const class_field<Class, Field> &f) const
       {
         _model.add_field(f);
       }
@@ -251,8 +251,35 @@ namespace json
       static_for_each(initializer(*this), std::forward<Fields>(fields)...);
     }
 
+    model(const model &m):
+      _field_map(m._field_map)
+    {
+    }
+
+    model(model &&m):
+      _field_map(std::move(m._field_map))
+    {
+    }
+
     ~model()
     {
+    }
+
+    model &operator=(const model &m)
+    {
+      model(m).swap(*this);
+      return *this;
+    }
+
+    model &operator=(model &&m)
+    {
+      m.swap(*this);
+      return *this;
+    }
+
+    void swap(model &m)
+    {
+      std::swap(_field_map, m._field_map);
     }
 
     void load(class_type &instance, const object_type &object) const
@@ -292,7 +319,7 @@ namespace json
     }
 
     template < typename Field >
-    void add_field(const Field &f)
+    void add_field(const class_field<Class, Field> &f)
     {
       auto x = create_field(f);
       try
@@ -327,6 +354,14 @@ namespace json
     }
 
   };
+
+  template < typename Class,
+             typename Field,
+             typename... Fields >
+  inline model<Class> make_model(const class_field<Class, Field> &field0, Fields&&... fields)
+  {
+    return model<Class>(field0, std::forward<Fields>(fields)...);
+  }
 
   template < typename Class, typename Char, typename Traits, typename Allocator >
   class model_istream
@@ -389,6 +424,13 @@ namespace json
 
 namespace std
 {
+
+  template < typename Class, typename Char, typename Traits, typename Allocator >
+  inline void swap(json::model<Class, Char, Traits, Allocator> &m1,
+                   json::model<Class, Char, Traits, Allocator> &m2)
+  {
+    m1.swap(m2);
+  }
 
   template < typename Class, typename Char, typename Traits, typename Allocator >
   inline json::model_istream<Class, Char, Traits, Allocator>
