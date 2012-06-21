@@ -107,16 +107,12 @@ struct A
 
 namespace json
 {
-
   namespace models
   {
-    
     // This is a descriptor of how to translate from and to JSON on instances of A.
     const model<A> A { make_model(field("x", &A::x),
                                   field("y", &A::y)) };
-  
   }
-
 }
 
 int main()
