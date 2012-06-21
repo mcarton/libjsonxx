@@ -4,7 +4,7 @@ libjson++
 C++11 JSON library.
 
 libjson++ provides the implementation of classes and functions to read and write JSON objects in C++.
-It's written in a STL-style and is thought to integrate to the standard library.
+It's written in a STL-style and is designed to integrate well with the standard library.
 
 Compilation
 -----------
