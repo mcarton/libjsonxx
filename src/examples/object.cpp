@@ -33,7 +33,7 @@ int main()
   obj3 = "-42.6E+10";
   obj4 = obj2;
 
-  obj5[0] = 42;
+  obj5[0] = 42.0;
   obj5[2] = obj3;
 
   obj6["Hello"] = "Achille";

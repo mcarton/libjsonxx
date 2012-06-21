@@ -367,23 +367,71 @@ namespace json
       return *this;
     }
 
-    basic_object &operator=(const long x)
+    basic_object &operator=(const short x)
     {
-      object_string s ( to_string<char_type, traits_type>(x, _allocator) );
-      _body.assign_string(_type, std::move(s), _allocator);
-      _type = type_string;
+      __assign_number(x);
       return *this;
     }
 
-    /*
-    basic_object &operator=(const double x)
+    basic_object &operator=(const int x)
     {
-      object_string s ( to_string<char_type, traits_type>(x, _allocator) );
-      _body.assign_string(_type, std::move(s), _allocator);
-      _type = type_string;
+      __assign_number(x);
       return *this;
     }
-    */
+
+    basic_object &operator=(const long x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const long long x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const unsigned short x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const unsigned int x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const unsigned long x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const unsigned long long x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const float x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const double x)
+    {
+      __assign_number(x);
+      return *this;
+    }
+
+    basic_object &operator=(const long double x)
+    {
+      __assign_number(x);
+      return *this;
+    }
 
     basic_object &operator[](const size_type index)
     {
@@ -516,37 +564,37 @@ namespace json
 
     object_string &get_string()
     {
-      assert_type_is(type_string, "json::basic_object<?>::string");
+      __assert_type_is(type_string, "json::basic_object<?>::string");
       return _body.string;
     }
 
     const object_string &get_string() const
     {
-      assert_type_is(type_string, "json::basic_object<?>::string");
+      __assert_type_is(type_string, "json::basic_object<?>::string");
       return _body.string;
     }
 
     object_list &get_list()
     {
-      assert_type_is(type_list, "json::basic_object<?>::list");
+      __assert_type_is(type_list, "json::basic_object<?>::list");
       return _body.list;
     }
 
     const object_list &get_list() const
     {
-      assert_type_is(type_list, "json::basic_object<?>::list");
+      __assert_type_is(type_list, "json::basic_object<?>::list");
       return _body.list;
     }
 
     object_map &get_map()
     {
-      assert_type_is(type_map, "json::basic_object<?>::map");
+      __assert_type_is(type_map, "json::basic_object<?>::map");
       return _body.map;
     }
 
     const object_map &get_map() const
     {
-      assert_type_is(type_map, "json::basic_object<?>::map");
+      __assert_type_is(type_map, "json::basic_object<?>::map");
       return _body.map;
     }
 
@@ -603,7 +651,15 @@ namespace json
     object_type		_type;
     object_body		_body;
 
-    void assert_type_is(const object_type type, const char *function) const
+    template < typename Integer >
+    void __assign_number(const Integer x)
+    {
+      object_string s ( to_string<char_type, traits_type>(x, _allocator) );
+      _body.assign_string(_type, std::move(s), _allocator);
+      _type = type_string;
+    }
+
+    void __assert_type_is(const object_type type, const char *function) const
     {
       if (type != _type)
 	{
