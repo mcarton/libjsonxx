@@ -9,7 +9,8 @@ It's written in a STL-style and is thought to integrate to the standard library.
 Compilation
 -----------
 
-libjson++ uses CMake to handle compilation, you can get CMake from this URL: http://www.cmake.org/
+libjson++ uses CMake to handle compilation, you can get CMake from this URL: http://www.cmake.org/.
+
 On UNIX systems the compilation will be something like:
 
     $ cmake .
