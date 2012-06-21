@@ -10,3 +10,9 @@
 *.lai
 *.la
 *.a
+
+# CMake files
+CMakeFiles/*
+CMakeCache.txt
+cmake_install.cmake
+src/json/def.h

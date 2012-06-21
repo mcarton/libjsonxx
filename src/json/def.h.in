@@ -1,0 +1,46 @@
+/*
+ * Copyright 2012 Achille Roussel.
+ *
+ * This file is part of Libjson++.
+ *
+ * Libjson++ is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Libjson++ is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef JSON_DEF_H
+#define JSON_DEF_H
+
+#include <cstddef>
+#include <cstdint>
+
+#define JSON_VERSION_MAJOR      @VERSION_MAJOR@
+#define JSON_VERSION_MINOR      @VERSION_MINOR@
+#define JSON_VERSION_PATCH      @VERSION_PATCH@
+
+#define JSON_Unknown            0
+#define JSON_GCC                1
+#define JSON_MSCV		2
+#define JSON_COMPILER           @COMPILER@
+#define JSON_COMPILER_IS_GCC    (JSON_COMPILER == JSON_GCC)
+#define JSON_COMPILER_IS_MSCV   (JSON_COMPILER == JSON_MSCV)
+#define JSON_COMPILER_HAS_CONSTEXPR (JSON_COMPILER_IS_GCC)
+
+/**
+ * @brief This name space contains declarations of all classes provided by the
+ * libjson++ library.
+ */
+namespace json
+{
+}
+
+#endif // JSON_DEF_H

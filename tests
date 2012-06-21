@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+import subprocess
+import unittest
+import json
+
+class TestLibJSON(unittest.TestCase):
+
+    def _check_types(self, original, result):
+        self.assertEqual(type(original), type(result))
+
+    def _check_string(self, original, result):
+        self.assertEqual(original, result)
+
+    def _check_list(self, original, result):
+        self.assertEqual(len(original), len(result))
+        for i in xrange(len(original)):
+            self._check(original[i], result[i])
+
+    def _check_map(self, original, result):
+        self.assertEqual(len(original), len(result))
+        for name in original:
+            self.assertIn(name, result)
+            self._check(original[name], result[name])
+
+    def _check(self, original, result):
+        self._check_types(original, result)
+
+        if original == None:
+            return
+
+        if isinstance(original, unicode):
+            return self._check_string(original, result)
+
+        if isinstance(original, list):
+            return self._check_list(original, result)
+
+        if isinstance(original, dict):
+            return self._check_map(original, result)
+
+    def _test(self, json_object):
+        p = subprocess.Popen(['./example-test'], shell = False, close_fds = True, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        try:
+            p.stdin.write(json.dumps(json_object))
+            p.stdin.flush()
+            p.stdin.close()
+            r = p.stdout.read()
+            r = json.loads(r)
+        finally:
+            p.wait()
+        return r, p.returncode
+
+    def _test_success(self, json_object):
+        json_string = json.dumps(json_object)
+        result, status = self._test(json_object)
+        self.assertEqual(status, 0)
+        self._check(json.loads(json_string), result)
+        return result
+
+    def _test_failure(self, json_object):
+        result, status = self._test(json_object)
+        self.assertEqual(status, 1)
+        return result
+
+    def test_01_null(self):
+        self._test_success(None)
+
+    def test_02_number(self):
+        self._test_success(0)
+        self._test_success(42)
+        self._test_success(-42)
+        self._test_success(0.0)
+        self._test_success(42.0)
+        self._test_success(-42.0)
+        self._test_success(1e10)
+        self._test_success(1e-10)
+
+    def test_03_string(self):
+        self._test_success("")
+        self._test_success("Hello World")
+        self._test_success("Hello World\n")
+
+    def test_04_list(self):
+        self._test_success([])
+        self._test_success([42])
+        self._test_success([None])
+        self._test_success(['Hello'])
+        self._test_success(['Hello', 'World'])
+        self._test_success([{'Hello':'World'}])
+
+    def test_05_map(self):
+        self._test_success({})
+        self._test_success({'Hello': None})
+        self._test_success({'Hello':'World'})
+        self._test_success({'Hello':'World', 'How':'are you?\n'})
+        self._test_success({'Hello':['World'], 'Answer':42})
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestLibJSON)
+    unittest.TextTestRunner(verbosity=2).run(suite)
