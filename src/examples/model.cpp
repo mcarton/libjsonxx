@@ -17,13 +17,19 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <map>
+#include <list>
 #include <iostream>
+#include <sstream>
 #include "json/model.h"
 
 struct A
 {
   int x;
   int y;
+  std::string name;
+  std::list<int> objects;
+  std::map<std::string, A> dict;
 };
 
 namespace json
@@ -32,9 +38,22 @@ namespace json
   namespace models
   {
 
-    const model<A> A ( json::make_model(json::field("x", &A::x),
-                                        json::field("y", &A::y)) );
+    const model<A> A ( make_model(field("x", &A::x),
+                                  field("y", &A::y),
+                                  field("name", &A::name),
+                                  field("objects", &A::objects),
+                                  field("dict", &A::dict)) );
     
+  }
+
+  void operator<<(A &a, const object &obj)
+  {
+    models::A.load(a, obj);
+  }
+
+  void operator>>(const A &a, object &obj)
+  {
+    models::A.dump(a, obj);
   }
 
 }
@@ -43,7 +62,10 @@ int main()
 {
   A a;
 
-  std::cin >> json::models::A >> a;
+  std::stringstream s;
+  s.str("{\"x\":42,\"y\":0,\"name\":\"Achille\",\"objects\":[1,2,3,4],\"dict\":{\"Hello\":{}}}");
+
+  s >> json::models::A >> a;
 
   std::cout << json::models::A << a << std::endl;
 

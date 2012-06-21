@@ -20,13 +20,40 @@
 #ifndef JSON_MODEL_H
 #define JSON_MODEL_H
 
-#include <ostream>
-#include <istream>
+#include <sstream>
 #include "json/def.h"
 #include "json/object.h"
 
+namespace std
+{
+
+  // Forward declaration of STL classes, then we don't need to include the
+  // entire standard library in this file.
+  template < typename, typename > class basic_istream;
+  template < typename, typename > class basic_ostream;
+  template < typename, typename, typename > class basic_string;
+  template < typename, typename > class vector;
+  template < typename, typename > class deque;
+  template < typename, typename > class list;
+  template < typename, typename, typename, typename > class map;
+  template < typename, typename, typename, typename, typename > class unordered_map;
+
+}
+
 namespace json
 {
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(short &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    field = std::stoi(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(unsigned short &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    field = std::stoul(obj);
+  }
 
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(int &field, const basic_object<Char, Traits, Allocator> &obj)
@@ -37,19 +64,154 @@ namespace json
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(unsigned int &field, const basic_object<Char, Traits, Allocator> &obj)
   {
-    field = std::stoi(obj);
+    field = std::stoul(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(long &field, const basic_object<Char, Traits, Allocator> &obj)
   {
-    field = std::stoi(obj);
+    field = std::stol(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(unsigned long &field, const basic_object<Char, Traits, Allocator> &obj)
   {
+    field = std::stoul(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(float &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    field = std::stof(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(double &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    field = std::stod(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(long double &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    field = std::stold(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline void operator<<(bool &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
     field = std::stol(obj);
+  }
+
+  template < typename Char, typename Traits, typename Allocator1, typename Allocator2 >
+  inline void operator<<(std::basic_string<Char, Traits, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    field = obj;
+  }
+
+  template < typename Char, typename Traits, typename Allocator1, typename Allocator2 >
+  inline void operator<<(basic_object<Char, Traits, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    field = obj;
+  }
+
+  template < typename List, typename Char, typename Traits, typename Allocator2 >
+  inline void __load_list(List &field, const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    if (obj.type() == type_list)
+      {
+        auto it = obj.begin();
+        auto jt = obj.end();
+        while (it != jt)
+          {
+            const basic_object<Char, Traits, Allocator2> &o = *it;
+            field.emplace_back();
+            field.back() << o;
+            ++it;
+          }
+      }
+    else
+      {
+        // TODO: throw an error
+      }
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator<<(std::vector<T, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __load_list(field, obj);
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator<<(std::deque<T, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __load_list(field, obj);
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator<<(std::list<T, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __load_list(field, obj);
+  }
+
+  template < typename Map, typename Char, typename Traits, typename Allocator >
+  inline void __load_map(Map &field, const basic_object<Char, Traits, Allocator> &obj)
+  {
+    if (obj.type() == type_map)
+      {
+        // TODO: see __dump_map.
+        std::basic_stringstream<Char, Traits, typename Map::allocator_type> buffer;
+
+        auto it = obj.begin();
+        auto jt = obj.end();
+        while (it != jt)
+          {
+            // TODO: I don't think that's very efficient but it does the job and
+            // integrates well with the STL...
+            // We may want to improve that sometimes.
+            typename Map::key_type key;
+            buffer << it->first;
+            buffer >> key;
+            field[key] << it->second;
+            ++it;
+          }
+      }
+    else
+      {
+        // TODO: throw an error
+      }
+  }
+
+  template < typename Key,
+             typename Value,
+             typename Compare,
+             typename Allocator1,
+             typename Char,
+             typename Traits,
+             typename Allocator2 >
+  inline void operator<<(std::map<Key, Value, Compare, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __load_map(field, obj);
+  }
+
+  template < typename Key,
+             typename Value,
+             typename Hash,
+             typename Equal,
+             typename Allocator1,
+             typename Char,
+             typename Traits,
+             typename Allocator2 >
+  inline void operator<<(std::unordered_map<Key, Value, Hash, Equal, Allocator1> &field,
+                         const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __load_map(field, obj);
   }
 
   template < typename T, typename Char, typename Traits, typename Allocator >
@@ -57,7 +219,91 @@ namespace json
   {
     obj = field;
   }
-  
+
+  template < typename List, typename Char, typename Traits, typename Allocator2 >
+  inline void __dump_list(const List &field, basic_object<Char, Traits, Allocator2> &obj)
+  {
+    std::size_t i = 0;
+    obj.make_list();
+    auto it = field.begin();
+    auto jt = field.end();
+    while (it != jt)
+      {
+        *it >> obj[i];
+        ++it;
+        ++i;
+      }
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator>>(const std::vector<T, Allocator1> &field,
+                         basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __dump_list(field, obj);
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator>>(const std::deque<T, Allocator1> &field,
+                         basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __dump_list(field, obj);
+  }
+
+  template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
+  inline void operator>>(const std::list<T, Allocator1> &field,
+                         basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __dump_list(field, obj);
+  }
+
+  template < typename Map, typename Char, typename Traits, typename Allocator >
+  inline void __dump_map(const Map &field, basic_object<Char, Traits, Allocator> &obj)
+  {
+    // TODO: implement a string stream object that allows to specify the allocator
+    // when building the object.
+    // For now the STL is kind of broken and doesn't let us pass an allocator to
+    // the constructor which may be a problem if some custom allocators rely on an
+    // underlying state which they should acquire when copied.
+    std::basic_stringstream<Char, Traits, typename Map::allocator_type> buffer;
+
+    obj.make_map();
+    auto it = field.begin();
+    auto jt = field.end();
+    while (it != jt)
+      {
+        buffer << it->first;
+        it->second >> obj[buffer.str()];
+        ++it;
+      }
+  }
+
+  template < typename Key,
+             typename Value,
+             typename Compare,
+             typename Allocator1,
+             typename Char,
+             typename Traits,
+             typename Allocator2 >
+  inline void operator>>(const std::map<Key, Value, Compare, Allocator1> &field,
+                         basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __dump_map(field, obj);
+  }
+
+  template < typename Key,
+             typename Value,
+             typename Hash,
+             typename Equal,
+             typename Allocator1,
+             typename Char,
+             typename Traits,
+             typename Allocator2 >
+  inline void operator>>(const std::unordered_map<Key, Value, Hash, Equal, Allocator1> &field,
+                         basic_object<Char, Traits, Allocator2> &obj)
+  {
+    __dump_map(field, obj);
+  }
+
   template < typename Class,
              typename Char = char,
              typename Traits = std::char_traits<char>,
@@ -263,6 +509,13 @@ namespace json
 
     ~model()
     {
+      auto it = _field_map.begin();
+      auto jt = _field_map.end();
+      while (it != jt)
+        {
+          destroy_field(it->second);
+          ++it;
+        }
     }
 
     model &operator=(const model &m)
