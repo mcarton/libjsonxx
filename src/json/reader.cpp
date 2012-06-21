@@ -56,13 +56,11 @@ namespace json
 
   object read(const std::string &str)
   {
-    std::cout << "yay!" << std::endl;
     return read<const std::string, object>(str);
   }
 
   object read(std::string &str)
   {
-    std::cout << "yay!" << std::endl;
     return read<const std::string, object>(str);
   }
 
