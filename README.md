@@ -93,7 +93,7 @@ Using JSON models
 -----------------
 
 JSON is a string format, C++ has strings but also has integers and floats.
-While libjson++ tries to provide as mainy functions as it can for parsing JSON objects it may be annoying and error prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes and instead want to use more expressive classes.
+While libjson++ tries to provide as mainy functions as it can fo parse JSON objects it may be annoying and error prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes and instead want to use more expressive classes.
 libjson++ provides the 'model' concept to solve this problem, a model is an object discribing how to transform a JSON object into a C++ object and vice-versa.
 ```c++
 #include <iostream>
