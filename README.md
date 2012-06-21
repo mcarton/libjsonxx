@@ -16,7 +16,8 @@ On UNIX systems the compilation will be something like:
     $ cmake .
     $ make
 
-On Windows systems you'll have to generate the Visual Studio project using CMake and then compile libjson++ using MSVC.
+On Windows systems you'll have to generate the Visual Studio project using CMake and then compile libjson++
+using MSVC.
 
 Building JSON objects
 ---------------------
@@ -93,9 +94,12 @@ int main()
 Using JSON models
 -----------------
 
-JSON is a string format, C++ has strings but also has integers and floats.
-While libjson++ tries to provide as mainy functions as it can to parse JSON objects it may be annoying and error prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes and instead want to use more expressive classes.
-libjson++ provides the 'model' concept to address this problem, a model is an object discribing how to transform a JSON object into a C++ object and vice-versa.
+JSON is a string format, C++ has strings but also has integers, floats and booleans.
+While libjson++ tries to provide as mainy functions as it can to parse JSON objects it may be annoying and error
+prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes
+and instead want to use more expressive classes.
+libjson++ provides the 'model' concept to address this problem, a model is an object discribing how to transform
+a JSON object into a C++ object and vice-versa.
 ```c++
 #include <iostream>
 #include "json/model.h"
@@ -135,7 +139,9 @@ int main()
 Using a custom memory allocator
 -------------------------------
 
-Sometimes one needs to provide one's own memory allocator, libjson++ follows the STL design, the json::object class is actually a typedef to a template class which makes it easy to customize the memory allocator to be used by the object.
+Sometimes one needs to provide one's own memory allocator, libjson++ follows the STL design, the json::object
+class is actually a typedef to a template class which makes it easy to customize the memory allocator to be
+used by the object.
 ```c++
 #include "json/object.h"
 
