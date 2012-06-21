@@ -17,6 +17,7 @@ On Windows systems you'll have to generate the Visual Studio project using CMake
 Building JSON objects
 ---------------------
 
+```c++
     #include "json/object.h"
     
     int main()
@@ -38,10 +39,12 @@ Building JSON objects
       
       return 0;
     }
+```
 
 Reading JSON objects
 --------------------
 
+```c++
     #include <iostream>
     #include "json/object.h"
     
@@ -57,10 +60,12 @@ Reading JSON objects
       
       return 0;
     }
+```
 
 Writing JSON objects
 --------------------
 
+```c++
     #include <iostream>
     #include "json/object.h"
     
@@ -76,3 +81,4 @@ Writing JSON objects
       
       return 0;
     }
+```
