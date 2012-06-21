@@ -56,6 +56,7 @@ list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/reader.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/reader.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/string.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/types.h)
+list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.h)
 
 # ==============================================================================
