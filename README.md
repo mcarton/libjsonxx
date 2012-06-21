@@ -40,6 +40,9 @@ int main()
   obj3["Hello"] = "World";
   obj3["Answer"] = 42; // Numbers are parsed and stored as strings.
   
+  // So we need to explicitly parse them as numeric values if we want to manipulate them.
+  double answer = std::stod(obj3["Answer"]);
+  
   return 0;
 }
 ```
