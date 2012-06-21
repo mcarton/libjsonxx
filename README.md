@@ -3,6 +3,9 @@ libjson++
 
 C++11 JSON library.
 
+libjson++ provides the implementation of classes and functions to deal read and write JSON objects in C++.
+It's written in a STL-style and is thought to integrate to the standard library.
+
 Compilation
 -----------
 
@@ -36,6 +39,9 @@ int main()
   // Accessing the object by key automatically defines it as a JSON map.
   obj3["Hello"] = "World";
   obj3["Answer"] = 42; // Numbers are parsed and stored as strings.
+  
+  // So we need to explicitly parse them as numeric values if we want to manipulate them.
+  double answer = std::stod(obj3["Answer"]);
   
   return 0;
 }
@@ -78,6 +84,80 @@ int main()
   
   // Writing the JSON object to stdout, prints [{"Hello":"World","Answer":42}]
   std::cout << obj << std::endl;
+  
+  return 0;
+}
+```
+
+Using JSON models
+-----------------
+
+JSON is a string format, C++ has strings but also has integers and floats.
+While libjson++ tries to provide as mainy functions as it can for parsing JSON objects it may be annoying and error prone to handle to do it by hand in the code. Plus, we may not want to deal with JSON objects all over the codes and instead want to use more expressive classes.
+libjson++ provides the 'model' concept to solve this problem, a model is an object discribing how to transform a JSON object into a C++ object and vice-versa.
+```c++
+#include <iostream>
+#include "json/model.h"
+
+struct A
+{
+  int x;
+  int y;
+};
+
+struct A_json_model : public json::model<A>
+{
+
+  // We call the super constructor with a list of JSON fields to be mapped to
+  // fields of the class A.
+  A_json_model():
+    json::model<A>
+    (
+    json::field("x", &A::x),
+    json::field("y", &B::y)
+    )
+
+};
+
+static const A_json_model model;
+
+int main()
+{
+  A a;
+  
+  // Inserts the model in the input pipeline to read a JSON object and flush it into
+  // the instance of A.
+  std::cin >> model >> a;
+  
+  // Inserts the model in the output pipeline to create a JSON representation of the
+  // instance of A and write it to the stream.
+  std::cout << model << a << std::endl;
+  
+  return 0;
+}
+```
+
+Using a custom memory allocator
+-------------------------------
+
+Sometimes one needs to provide one's own memory allocator, libjson++ uses the same design as the STL to solve this problem, the json::object class is actually a typedef to a template class which makes it easy to customize the memory allocator to be used by the object.
+```c++
+#include "json/object.h"
+
+template < typename T >
+class json_allocator
+{
+  // ...
+};
+
+int main()
+{
+  typedef json::basic_object< char, std::char_traits<char>, json_allocator<char> > json_object;
+  
+  json_allocator a;
+  json_object obj { a };
+  
+  obj = "Storage for this string will be created by the custom allocator";
   
   return 0;
 }
