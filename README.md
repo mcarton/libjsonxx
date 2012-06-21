@@ -125,7 +125,7 @@ int main()
   
   // Inserts the model in the input pipeline to read a JSON object and flush it into
   // the instance of A.
-  std::cin >> json::modesl::A >> a;
+  std::cin >> json::models::A >> a;
   
   // Inserts the model in the output pipeline to create a JSON representation of the
   // instance of A and write it to the stream.
