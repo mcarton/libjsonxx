@@ -18,67 +18,67 @@ Building JSON objects
 ---------------------
 
 ```c++
-    #include "json/object.h"
-    
-    int main()
-    {
-      json::object obj1;
-      json::object obj2;
-      json::object obj3;
-      
-      // String assignment sets the type of the object internally to be a JSON string.
-      obj1 = "Hello World";
-      
-      // Accessing the object by index automatically defines it as a JSON list.
-      obj2[0] = "Hello";
-      obj2[1] = "World";
-      
-      // Accessing the object by key automatically defines it as a JSON map.
-      obj3["Hello"] = "World";
-      obj3["Answer"] = 42; // Numbers are parsed and stored as strings.
-      
-      return 0;
-    }
+#include "json/object.h"
+
+int main()
+{
+  json::object obj1;
+  json::object obj2;
+  json::object obj3;
+  
+  // String assignment sets the type of the object internally to be a JSON string.
+  obj1 = "Hello World";
+  
+  // Accessing the object by index automatically defines it as a JSON list.
+  obj2[0] = "Hello";
+  obj2[1] = "World";
+  
+  // Accessing the object by key automatically defines it as a JSON map.
+  obj3["Hello"] = "World";
+  obj3["Answer"] = 42; // Numbers are parsed and stored as strings.
+  
+  return 0;
+}
 ```
 
 Reading JSON objects
 --------------------
 
 ```c++
-    #include <iostream>
-    #include "json/object.h"
-    
-    int main()
-    {
-      json::object obj;
-      
-      // Reads stdin until a valid JSON object has been entirely read.
-      std::cin >> obj;
-      
-      // Using the read function to parse a sequence of characters.
-      obj = json::read("{\"Hello\":\"World\"}");
-      
-      return 0;
-    }
+#include <iostream>
+#include "json/object.h"
+
+int main()
+{
+  json::object obj;
+  
+  // Reads stdin until a valid JSON object has been entirely read.
+  std::cin >> obj;
+  
+  // Using the read function to parse a sequence of characters.
+  obj = json::read("{\"Hello\":\"World\"}");
+  
+  return 0;
+}
 ```
 
 Writing JSON objects
 --------------------
 
 ```c++
-    #include <iostream>
-    #include "json/object.h"
-    
-    int main()
-    {
-      json::object obj;
-      
-      obj[0]["Hello"] = "World";
-      obj[0]["Answer"] = 42;
-      
-      // Writing the JSON object to stdout, prints {"Hello":"World","Answer":42}
-      std::cout << obj << std::endl;
-      
-      return 0;
-    }
+#include <iostream>
+#include "json/object.h"
+
+int main()
+{
+  json::object obj;
+  
+  obj[0]["Hello"] = "World";
+  obj[0]["Answer"] = 42;
+  
+  // Writing the JSON object to stdout, prints {"Hello":"World","Answer":42}
+  std::cout << obj << std::endl;
+  
+  return 0;
+}
 ```
