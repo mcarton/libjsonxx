@@ -577,37 +577,37 @@ namespace json
 
     object_string &get_string()
     {
-      __assert_type_is(type_string, "json::basic_object<?>::string");
+      __assert_type_is(type_string, "json::basic_object<?>::get_string");
       return _body.string;
     }
 
     const object_string &get_string() const
     {
-      __assert_type_is(type_string, "json::basic_object<?>::string");
+      __assert_type_is(type_string, "json::basic_object<?>::get_string");
       return _body.string;
     }
 
     object_list &get_list()
     {
-      __assert_type_is(type_list, "json::basic_object<?>::list");
+      __assert_type_is(type_list, "json::basic_object<?>::get_list");
       return _body.list;
     }
 
     const object_list &get_list() const
     {
-      __assert_type_is(type_list, "json::basic_object<?>::list");
+      __assert_type_is(type_list, "json::basic_object<?>::get_list");
       return _body.list;
     }
 
     object_map &get_map()
     {
-      __assert_type_is(type_map, "json::basic_object<?>::map");
+      __assert_type_is(type_map, "json::basic_object<?>::get_map");
       return _body.map;
     }
 
     const object_map &get_map() const
     {
-      __assert_type_is(type_map, "json::basic_object<?>::map");
+      __assert_type_is(type_map, "json::basic_object<?>::get_map");
       return _body.map;
     }
 
