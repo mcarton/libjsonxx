@@ -456,7 +456,7 @@ namespace json
       else if (_type != type_list)
 	{
 	  error_json_object_invalid_type(this, type_list, _type,
-					 "json::basic_object<?>::at");
+					 "json::basic_object<?>::operator[index]");
 	}
       if (_body.list.size() <= index)
 	{
@@ -470,7 +470,7 @@ namespace json
       if (_type != type_list)
 	{
 	  error_json_object_invalid_type(this, type_list, _type,
-					 "json::basic_object<?>::at");	  
+					 "json::basic_object<?>::operator[index]");
 	}
       return _body.list.at(index);
     }
