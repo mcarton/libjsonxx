@@ -342,7 +342,7 @@ namespace json
   }
 
   template < typename InputIterator >
-  inline bool is_json_number(InputIterator &first, InputIterator &last)
+  inline bool is_json_number(InputIterator first, InputIterator last)
   {
     typedef typename std::iterator_traits<InputIterator>::reference reference;
     if (read_number(first, last, [](reference) {}))
@@ -353,11 +353,60 @@ namespace json
   }
 
   template < typename Iterable >
-  inline bool is_json_number(Iterable &object)
+  inline bool is_json_number(Iterable &&object)
   {
-    auto beg = std::begin(object);
-    auto end = std::end(object);
-    return is_json_number(beg, end);
+    return is_json_number(std::begin(object), std::end(object));
+  }
+
+  template < typename InputIterator, int N >
+  inline bool __is(InputIterator &first, InputIterator &last, const char (&str)[N])
+  {
+    typedef typename std::size_t index;
+    index i;
+    for (i = 0; (first != last) && (i != (N - 1)); ++i, ++first)
+      {
+        if ((*first) != str[i])
+          {
+            return false;
+          }
+      }
+    return i == (N - 1);
+  }
+
+  template < typename InputIterator >
+  inline bool is_json_true(InputIterator first, InputIterator last)
+  {
+    return __is(first, last, "true"); 
+  }
+
+  template < typename Iterable >
+  inline bool is_json_true(Iterable &&object)
+  {
+    return is_json_true(std::begin(object), std::end(object));
+  }
+
+  template < typename InputIterator >
+  inline bool is_json_false(InputIterator first, InputIterator last)
+  {
+    return __is(first, last, "false"); 
+  }
+
+  template < typename Iterable >
+  inline bool is_json_false(Iterable &&object)
+  {
+    return is_json_false(std::begin(object), std::end(object));
+  }
+
+  template < typename InputIterator >
+  inline bool is_json_boolean(InputIterator first, InputIterator last)
+  {
+    return is_json_true(first, last) || is_json_false(first, last);
+  }
+
+  template < typename Iterable >
+  inline bool is_json_boolean(Iterable &&object)
+  {
+    return is_json_boolean(std::begin(object), std::end(object));
   }
 
 }

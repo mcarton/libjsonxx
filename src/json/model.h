@@ -103,7 +103,18 @@ namespace json
   template < typename Char, typename Traits, typename Allocator >
   inline void operator<<(bool &field, const basic_object<Char, Traits, Allocator> &obj)
   {
-    field = std::stol(obj);
+    if (is_true(obj))
+      {
+        field = true;
+      }
+    else if (is_false(obj))
+      {
+        field = false;
+      }
+    else
+      {
+        // TODO: crash, it's not a boolean
+      }
   }
 
   template < typename Char, typename Traits, typename Allocator1, typename Allocator2 >

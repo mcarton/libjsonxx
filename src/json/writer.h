@@ -66,8 +66,7 @@ namespace json
   inline void write_string(std::basic_ostream<Char, Traits> &out, const String &s)
   {
     typedef basic_char_sequence<Char, Traits> char_sequence;
-
-    if (is_json_number(s))
+    if (is_json_boolean(s) || is_json_number(s))
       {
 	out << s;
       }

@@ -25,6 +25,7 @@
 
 struct A
 {
+  bool f;
   int x;
   int y;
   std::string name;
@@ -38,7 +39,8 @@ namespace json
   namespace models
   {
 
-    const model<A> A ( make_model(field("x", &A::x),
+    const model<A> A ( make_model(field("f", &A::f),
+                                  field("x", &A::x),
                                   field("y", &A::y),
                                   field("name", &A::name),
                                   field("objects", &A::objects),
@@ -84,7 +86,7 @@ int main()
   A a;
 
   std::stringstream s;
-  s.str("{\"x\":42,\"y\":0,\"name\":\"Achille\",\"objects\":[1,2,3,4],\"dict\":{\"Hello\":{}}}");
+  s.str("{\"f\":false,\"x\":42,\"y\":0,\"name\":\"Achille\",\"objects\":[1,2,3,4],\"dict\":{\"Hello\":{}}}");
 
   // Now this is using JSON parsing and formatting, how sexy?
   s >> a;

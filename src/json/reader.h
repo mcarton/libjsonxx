@@ -160,8 +160,8 @@ namespace json
 	      case 'b':  str.push_back('\b'); break;
 	      case 'f':  str.push_back('\f'); break;
 	      case 'n':  str.push_back('\n'); break;
-	      case 'r':  str.push_back('\r'); break;
-	      case 't':  str.push_back('\t'); break;
+              case 'r':  str.push_back('\r'); break;
+              case 't':  str.push_back('\t'); break;
 	      default:   error_invalid_input_non_json();
 	      }
 	  }
@@ -213,15 +213,38 @@ namespace json
     consume_char(first, last); // consumes '}'
   }
 
-  template < typename InputIterator >
-  inline void read_null(InputIterator &first,InputIterator &last)
+  template < typename InputIterator, int N >
+  inline void __read(InputIterator &first,InputIterator &last, const char (&str)[N])
   {
     typedef typename std::size_t index;
-    const char *json_null = "null";
-    for (index i = 0; (first != last) && (i != 4); ++i)
+    for (index i = 0; (first != last) && (i != (N - 1)); ++i)
       {
-	consume_char(first, last, json_null[i]);
+	consume_char(first, last, str[i]);
       }
+  }
+
+  template < typename InputIterator >
+  inline void read_null(InputIterator &first, InputIterator &last)
+  {
+    __read(first, last, "null");
+  }
+
+  template < typename InputIterator, typename Char, typename Traits, typename Allocator >
+  inline void read_true(InputIterator &first,
+                        InputIterator &last,
+                        basic_object<Char, Traits, Allocator> &obj)
+  {
+    __read(first, last, "true");
+    obj = true;
+  }
+
+  template < typename InputIterator, typename Char, typename Traits, typename Allocator >
+  inline void read_false(InputIterator &first,
+                         InputIterator &last,
+                         basic_object<Char, Traits, Allocator> &obj)
+  {
+    __read(first, last, "false");
+    obj = false;
   }
 
   template < typename InputIterator, typename Char, typename Traits, typename Allocator >
@@ -248,9 +271,11 @@ namespace json
     next_char(first, last);
     switch (*first)
       {
-      case '[': read_list(first, last, obj); break;
-      case '{': read_map(first, last, obj);  break;
-      case 'n': read_null(first, last);      break;
+      case '[': read_list(first, last, obj);  break;
+      case '{': read_map(first, last, obj);   break;
+      case 't': read_true(first, last, obj);  break;
+      case 'f': read_false(first, last, obj); break;
+      case 'n': read_null(first, last);       break;
       default:
 	if (one_of(*first, '"', '-', '+', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'))
 	  {

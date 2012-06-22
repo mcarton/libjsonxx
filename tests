@@ -64,7 +64,11 @@ class TestLibJSON(unittest.TestCase):
     def test_01_null(self):
         self._test_success(None)
 
-    def test_02_number(self):
+    def test_02_boolean(self):
+        self._test_success(True)
+        self._test_success(False)
+
+    def test_03_number(self):
         self._test_success(0)
         self._test_success(42)
         self._test_success(-42)
@@ -74,12 +78,12 @@ class TestLibJSON(unittest.TestCase):
         self._test_success(1e10)
         self._test_success(1e-10)
 
-    def test_03_string(self):
+    def test_04_string(self):
         self._test_success("")
         self._test_success("Hello World")
         self._test_success("Hello World\n")
 
-    def test_04_list(self):
+    def test_05_list(self):
         self._test_success([])
         self._test_success([42])
         self._test_success([None])
@@ -87,7 +91,7 @@ class TestLibJSON(unittest.TestCase):
         self._test_success(['Hello', 'World'])
         self._test_success([{'Hello':'World'}])
 
-    def test_05_map(self):
+    def test_06_map(self):
         self._test_success({})
         self._test_success({'Hello': None})
         self._test_success({'Hello':'World'})

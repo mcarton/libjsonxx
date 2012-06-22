@@ -367,6 +367,19 @@ namespace json
       return *this;
     }
 
+    basic_object &operator=(const bool x)
+    {
+      if (x)
+        {
+          (*this) = "true";
+        }
+      else
+        {
+          (*this) = "false";
+        }
+      return *this;
+    }
+
     basic_object &operator=(const short x)
     {
       __assign_number(x);
@@ -697,6 +710,18 @@ namespace json
   inline bool is_null(const basic_object<Char, Traits, Allocator> &obj)
   {
     return obj.type() == type_null;
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline bool is_true(const basic_object<Char, Traits, Allocator> &obj)
+  {
+    return (obj.type() == type_string) && is_json_true(obj.get_string());
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
+  inline bool is_false(const basic_object<Char, Traits, Allocator> &obj)
+  {
+    return (obj.type() == type_string) && is_json_false(obj.get_string());
   }
 
   template < typename Char,
