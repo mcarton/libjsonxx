@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include <stdexcept>
+#include "json/error.h"
 #include "json/object.h"
 
 namespace json
@@ -42,7 +42,7 @@ namespace json
     s << " was found (at ";
     s << at;
     s << ")";
-    throw std::runtime_error(s.str());
+    throw error(s.str());
   }
 
   template bool operator==(const object &, const object &);

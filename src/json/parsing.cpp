@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include <stdexcept>
+#include "json/error.h"
 #include "json/parsing.h"
 
 namespace json
@@ -29,7 +29,7 @@ namespace json
     std::ostringstream s;
     s << function;
     s << ": invalid extra data at end of parsed input";
-    throw std::runtime_error(s.str());
+    throw error(s.str());
   }
 
   void error_parsing_empty_number(const char *function)
@@ -37,7 +37,7 @@ namespace json
     std::ostringstream s;
     s << function;
     s << ": trying to parse number from empty input";
-    throw std::runtime_error(s.str());
+    throw error(s.str());
   }
 
   void error_parsing_non_digit(const char *function)
@@ -45,7 +45,7 @@ namespace json
     std::ostringstream s;
     s << function;
     s << ": trying to parse number from non-numeric input";
-    throw std::runtime_error(s.str());
+    throw error(s.str());
   }
 
 }

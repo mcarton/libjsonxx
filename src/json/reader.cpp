@@ -18,7 +18,7 @@
  */
 
 #include <string>
-#include <stdexcept>
+#include "json/error.h"
 #include "json/reader.h"
 #include "json/object.h"
 
@@ -27,12 +27,12 @@ namespace json
 
   void error_invalid_input_eof()
   {
-    throw std::runtime_error("json::read_object: unexpected EOF");
+    throw error("json::read_object: unexpected EOF");
   }
 
   void error_invalid_input_non_json()
   {
-    throw std::runtime_error("json::read_object: invalid non-JSON input");
+    throw error("json::read_object: invalid non-JSON input");
   }
 
   void read_object(std::istream &in, object &obj)

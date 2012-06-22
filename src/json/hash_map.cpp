@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-#include <stdexcept>
+#include "json/error.h"
 #include "json/hash_map.h"
 
 namespace json
@@ -34,7 +34,7 @@ namespace json
     s << "' key not found (at ";
     s << at;
     s << ")";
-    throw std::runtime_error(s.str());
+    throw error(s.str());
   }
 
 }

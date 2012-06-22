@@ -43,6 +43,14 @@ namespace std
 namespace json
 {
 
+  void error_loading_boolean();
+
+  void error_loading_list();
+
+  void error_loading_map();
+
+  void error_loading_object();
+
   // Overloading of the '<<' operator to provide a way to transform a JSON
   // object into C++ types.
 
@@ -113,7 +121,7 @@ namespace json
       }
     else
       {
-        // TODO: crash, it's not a boolean
+        error_loading_boolean();
       }
   }
 
@@ -148,7 +156,7 @@ namespace json
       }
     else
       {
-        // TODO: throw an error
+        error_loading_list();
       }
   }
 
@@ -197,7 +205,7 @@ namespace json
       }
     else
       {
-        // TODO: throw an error
+        error_loading_map();
       }
   }
 
@@ -592,11 +600,9 @@ namespace json
               ++it;
             }
         }
-
-      // Doesn't know how to deal with JSON object types other than 'map'.
       else
         {
-          // TODO
+          error_loading_object();
         }
     }
 

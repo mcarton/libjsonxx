@@ -17,14 +17,14 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdexcept>
+#include "json/error.h"
 
 namespace json
 {
 
   void error_null_iterator_cannot_be_incremented()
   {
-    throw std::runtime_error("json::iterator::operator++: null iterator cannot be incremented");
+    throw error("json::iterator::operator++: null iterator cannot be incremented");
   }
 
 }
