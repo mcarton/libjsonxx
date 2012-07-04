@@ -19,7 +19,7 @@
 
 #include <ostream>
 #include "json/writer.h"
-#include "json/object.h"
+#include "json/object.tpp"
 
 namespace json
 {

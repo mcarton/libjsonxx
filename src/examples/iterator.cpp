@@ -31,7 +31,7 @@ int main()
   auto jt = obj.end();
   while (it != jt)
     {
-      json::object &x = *it++;
+      const json::object &x = *it++;
       std::cout << x << std::endl;
     }
 

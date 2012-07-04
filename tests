@@ -45,6 +45,8 @@ class TestLibJSON(unittest.TestCase):
             p.stdin.close()
             r = p.stdout.read()
             r = json.loads(r)
+        except ValueError:
+            raise ValueError("No JSON object could be decoded from: %s" % r)
         finally:
             p.wait()
         return r, p.returncode

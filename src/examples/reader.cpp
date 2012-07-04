@@ -24,7 +24,7 @@ int main()
 {
   json::object obj;
   std::stringstream s;
-  s.str("{\"toto\":\"titi\",\"tata\":[42]}");
+  s.str("{\"toto\":\"titi\",\"tata\":[42,true,false,0]}");
   s >> obj;
   std::cout << obj << std::endl;
   return 0;

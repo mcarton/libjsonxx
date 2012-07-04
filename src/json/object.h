@@ -20,6 +20,7 @@
 #ifndef JSON_OBJECT_H
 #define JSON_OBJECT_H
 
+#include <iosfwd>
 #include <vector>
 #include <string>
 #include <memory>
@@ -69,6 +70,9 @@ namespace json
     typedef typename std::vector<basic_object, object_allocator>	object_list;
     typedef hash_map<basic_object, Char, Traits, Allocator>		object_map;
     typedef typename std::basic_string<Char, Traits, Allocator>		object_string;
+    typedef const object_list						const_object_list;
+    typedef const object_map						const_object_map;
+    typedef const object_string						const_object_string;
     typedef Allocator							allocator_type;
     typedef Traits							traits_type;
     typedef Char							char_type;
@@ -203,35 +207,85 @@ namespace json
 
     };
 
-    typedef typename object_list::iterator		list_iterator;
-    typedef typename object_map::iterator		map_iterator;
+    typedef typename object_list::iterator list_iterator;
+    typedef typename object_map::iterator map_iterator;
 
-    typedef typename object_list::const_iterator	const_list_iterator;
-    typedef typename object_map::const_iterator		const_map_iterator;
+    typedef typename object_list::const_iterator const_list_iterator;
+    typedef typename object_map::const_iterator const_map_iterator;
 
   public:
 
     typedef typename json::iterator<basic_object,
 				    list_iterator,
-				    map_iterator>	iterator;
+				    map_iterator> iterator;
 
     typedef typename json::iterator<const basic_object,
 				    const_list_iterator,
 				    const_map_iterator>	const_iterator;
 
-    basic_object(const allocator_type &a = allocator_type()):
+    basic_object(const allocator_type &a = allocator_type());
+
+    basic_object(const basic_object &obj);
+
+    basic_object(basic_object &&obj);
+
+    basic_object(bool x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(short x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(int x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(long x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(long long x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(unsigned short x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(unsigned int x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(unsigned long x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(unsigned long long x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(float x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(double x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(long double x,
+		 const allocator_type &a = allocator_type());
+
+    basic_object(const char_sequence_type &s,
+		 const allocator_type &a = allocator_type());
+
+    template < int N >
+    basic_object(const char_type (&s)[N],
+		 const allocator_type &a = allocator_type()):
       _allocator(a),
       _type(type_null),
       _body()
     {
+      (*this) = s;
     }
 
-    basic_object(const basic_object &obj):
-      _allocator(obj._allocator),
-      _type(obj._type),
+    template < typename _Alloc >
+    basic_object(const std::basic_string<Char, Traits, _Alloc> &s,
+		 const allocator_type &a = allocator_type()):
+      _allocator(a),
+      _type(type_null),
       _body()
     {
-      _body.create_copy(obj._type, obj._body);
+      (*this) = s;
     }
 
     template < typename _Alloc >
@@ -250,81 +304,54 @@ namespace json
 	}
     }
 
-    basic_object(basic_object &&obj):
-      _allocator(),
-      _type(type_null),
-      _body()
-    {
-      obj.swap(*this);
-    }
+    ~basic_object();
+
+    basic_object &operator=(const basic_object &obj);
+
+    basic_object &operator=(basic_object &&obj);
+
+    basic_object &operator=(const char_sequence_type &s);
+
+    basic_object &operator=(const_object_string &s);
+
+    basic_object &operator=(object_string &&s);
+
+    basic_object &operator=(bool x);
+
+    basic_object &operator=(short x);
+
+    basic_object &operator=(int x);
+
+    basic_object &operator=(long x);
+
+    basic_object &operator=(long long x);
+
+    basic_object &operator=(unsigned short x);
+
+    basic_object &operator=(unsigned int x);
+
+    basic_object &operator=(unsigned long x);
+
+    basic_object &operator=(unsigned long long x);
+
+    basic_object &operator=(float x);
+
+    basic_object &operator=(double x);
+
+    basic_object &operator=(long double x);
+
+    basic_object &operator[](size_type index);
 
     template < int N >
-    basic_object(const char (&s)[N],
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
+    basic_object &operator=(const char_type (&s)[N])
     {
-      (*this) = s;
+      return (*this) = char_sequence_type(s);
     }
 
-    basic_object(const char_sequence_type &s,
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
+    template < typename _Alloc >
+    basic_object &operator=(const std::basic_string<Char, Traits, _Alloc> &s)
     {
-      (*this) = s;
-    }
-
-    basic_object(const object_string &s,
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
-    {
-      (*this) = s;
-    }
-
-    basic_object(object_string &&s,
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
-    {
-      (*this) = std::forward<object_string>(s);
-    }
-
-    basic_object(const long x,
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
-    {
-      (*this) = x;
-    }
-
-    basic_object(const double x,
-		 const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _type(type_null),
-      _body()
-    {
-      (*this) = x;
-    }
-
-    ~basic_object()
-    {
-      clear();
-    }
-
-    basic_object &operator=(const basic_object &obj)
-    {
-      if (this != &obj)
-	{
-	  basic_object(obj).swap(*this);
-	}
-      return *this;
+      return (*this) = char_sequence_type(s);
     }
 
     template < typename _Alloc >
@@ -334,168 +361,18 @@ namespace json
       return *this;
     }
 
-    basic_object &operator=(basic_object &&obj)
-    {
-      obj.swap(*this);
-      return *this;
-    }
+    const basic_object &operator[](size_type index) const;
 
-    template < int N >
-    basic_object &operator=(const char (&s)[N])
-    {
-      return ((*this) = char_sequence_type(s));
-    }
+    basic_object &operator[](const char_sequence_type &key);
 
-    basic_object &operator=(const char_sequence_type &s)
-    {
-      _body.assign_string(_type, s, _allocator);
-      _type = type_string;
-      return *this;
-    }
-
-    basic_object &operator=(const object_string &s)
-    {
-      _body.assign_string(_type, s, _allocator);
-      _type = type_string;
-      return *this;
-    }
-
-    basic_object &operator=(object_string &&s)
-    {
-      _body.assign_string(_type, std::forward<object_string>(s), _allocator);
-      _type = type_string;
-      return *this;
-    }
-
-    basic_object &operator=(const bool x)
-    {
-      if (x)
-        {
-          (*this) = "true";
-        }
-      else
-        {
-          (*this) = "false";
-        }
-      return *this;
-    }
-
-    basic_object &operator=(const short x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const int x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const long x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const long long x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const unsigned short x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const unsigned int x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const unsigned long x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const unsigned long long x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const float x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const double x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator=(const long double x)
-    {
-      assign_number(x);
-      return *this;
-    }
-
-    basic_object &operator[](const size_type index)
-    {
-      if (_type == type_null)
-	{
-	  _body.create_list(_allocator);
-	  _type = type_list;
-	}
-      else if (_type != type_list)
-	{
-	  error_json_object_invalid_type(this, type_list, _type,
-					 "json::basic_object<?>::operator[index]");
-	}
-      if (_body.list.size() <= index)
-	{
-	  _body.list.resize(index + 1);
-	}
-      return _body.list[index];
-    }
-
-    const basic_object &operator[](const size_type index) const
-    {
-      if (_type != type_list)
-	{
-	  error_json_object_invalid_type(this, type_list, _type,
-					 "json::basic_object<?>::operator[index]");
-	}
-      return _body.list.at(index);
-    }
-
-    basic_object &operator[](const char_sequence_type &key)
-    {
-      if (_type == type_null)
-	{
-	  _body.create_map(_allocator);
-	  _type = type_map;
-	}
-      return get_map()[key];
-    }
-
-    const basic_object &operator[](const char_sequence_type &key) const
-    {
-      return get_map()[key];
-    }
+    const basic_object &operator[](const char_sequence_type &key) const;
 
     operator object_string &()
     {
       return get_string();
     }
 
-    operator const object_string &() const
+    operator const_object_string &() const
     {
       return get_string();
     }
@@ -506,158 +383,41 @@ namespace json
       return get_string();
     }
 
-    void swap(basic_object &obj)
-    {
-      object_body tmp;
+    void swap(basic_object &obj);
 
-      tmp.create_move(_type, std::move(_body));
+    allocator_type get_allocator() const;
 
-      _body.destroy(_type);
-      _body.create_move(obj._type, std::move(obj._body));
+    object_type type() const;
 
-      obj._body.destroy(obj._type);
-      obj._body.create_move(_type, std::move(tmp));
+    void clear();
 
-      tmp.destroy(_type);
+    void make_null();
 
-      std::swap(_type, obj._type);
-      std::swap(_allocator, obj._allocator);
-    }
+    void make_string();
 
-    allocator_type get_allocator() const
-    {
-      return _allocator;
-    }
+    void make_list();
 
-    object_type type() const
-    {
-      return _type;
-    }
+    void make_map();
 
-    void clear()
-    {
-      _body.destroy(_type);
-      _type = type_null;
-    }
+    object_string &get_string();
 
-    void make_null()
-    {
-      clear();
-    }
+    const_object_string &get_string() const;
 
-    void make_string()
-    {
-      if (_type != type_string)
-	{
-	  clear();
-	  _body.create_string(_allocator);
-	  _type = type_string;
-	}
-    }
+    object_list &get_list();
 
-    void make_list()
-    {
-      if (_type != type_list)
-	{
-	  clear();
-	  _body.create_list(_allocator);
-	  _type = type_list;
-	}
-    }
+    const_object_list &get_list() const;
 
-    void make_map()
-    {
-      if (_type != type_map)
-	{
-	  clear();
-	  _body.create_map(_allocator);
-	  _type = type_map;
-	}
-    }
+    object_map &get_map();
 
-    object_string &get_string()
-    {
-      assert_type_is(type_string, "json::basic_object<?>::get_string");
-      return _body.string;
-    }
+    const_object_map &get_map() const;
 
-    const object_string &get_string() const
-    {
-      assert_type_is(type_string, "json::basic_object<?>::get_string");
-      return _body.string;
-    }
+    iterator begin();
 
-    object_list &get_list()
-    {
-      assert_type_is(type_list, "json::basic_object<?>::get_list");
-      return _body.list;
-    }
+    iterator end();
 
-    const object_list &get_list() const
-    {
-      assert_type_is(type_list, "json::basic_object<?>::get_list");
-      return _body.list;
-    }
+    const_iterator begin() const;
 
-    object_map &get_map()
-    {
-      assert_type_is(type_map, "json::basic_object<?>::get_map");
-      return _body.map;
-    }
-
-    const object_map &get_map() const
-    {
-      assert_type_is(type_map, "json::basic_object<?>::get_map");
-      return _body.map;
-    }
-
-    iterator begin()
-    {
-      switch (_type)
-	{
-        case type_list:   return iterator(_body.list.begin(), 0, _body.list.size());
-        case type_map:    return iterator(_body.map.begin(), 0, _body.map.size());
-	case type_string: break;
-	case type_null:   break;
-	}
-      return iterator();
-    }
-
-    iterator end()
-    {
-      switch (_type)
-        {
-        case type_list:   return iterator(_body.list.end(), _body.list.size(), _body.list.size());
-        case type_map:    return iterator(_body.map.end(), _body.map.size(), _body.map.size());
-        case type_string: break;
-        case type_null:   break;
-        }
-      return iterator();
-    }
-
-    const_iterator begin() const
-    {
-      switch (_type)
-	{
-        case type_list:   return const_iterator(_body.list.begin(), 0, _body.list.size());
-        case type_map:    return const_iterator(_body.map.begin(), 0, _body.map.size());
-	case type_string: break;
-	case type_null:   break;
-	}
-      return const_iterator();
-    }
-
-    const_iterator end() const
-    {
-      switch (_type)
-        {
-        case type_list:   return const_iterator(_body.list.end(), _body.list.size(), _body.list.size());
-        case type_map:    return const_iterator(_body.map.end(), _body.map.size(), _body.map.size());
-        case type_string: break;
-        case type_null:   break;
-        }
-      return const_iterator();
-    }
+    const_iterator end() const;
 
   private:
     allocator_type	_allocator;
@@ -665,20 +425,14 @@ namespace json
     object_body		_body;
 
     template < typename Integer >
-    void assign_number(const Integer x)
+    void assign_number(const Integer &x)
     {
       object_string s ( to_string<char_type, traits_type>(x, _allocator) );
       _body.assign_string(_type, std::move(s), _allocator);
       _type = type_string;
     }
 
-    void assert_type_is(const object_type type, const char *function) const
-    {
-      if (type != _type)
-	{
-	  error_json_object_invalid_type(this, type, _type, function);
-	}
-    }
+    void assert_type_is(object_type, const char *) const;
 
   };
 
@@ -728,186 +482,56 @@ namespace json
 	     typename Traits,
 	     typename Allocator1,
 	     typename Allocator2 >
-  inline bool equals_address(const basic_object<Char, Traits, Allocator1> &obj1,
-			     const basic_object<Char, Traits, Allocator2> &obj2)
-  {
-    return std::addressof(obj1) == std::addressof(obj2);
-  }
+  bool operator==(const basic_object<Char, Traits, Allocator1> &obj1,
+		  const basic_object<Char, Traits, Allocator2> &obj2);
 
   template < typename Char,
 	     typename Traits,
 	     typename Allocator1,
 	     typename Allocator2 >
-  inline bool equals_string(const basic_object<Char, Traits, Allocator1> &obj1,
-			    const basic_object<Char, Traits, Allocator2> &obj2)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-    return char_sequence(obj1.get_string()) == char_sequence(obj2.get_string());
-  }
+  bool operator!=(const basic_object<Char, Traits, Allocator1> &obj1,
+		  const basic_object<Char, Traits, Allocator2> &obj2);
 
   template < typename Char,
 	     typename Traits,
-	     typename Allocator1,
-	     typename Allocator2 >
-  inline bool equals_list(const basic_object<Char, Traits, Allocator1> &obj1,
-			  const basic_object<Char, Traits, Allocator2> &obj2)
-  {
-    auto &list1 = obj1.get_list();
-    auto &list2 = obj2.get_list();
-    if (list1.size() != list2.size())
-      {
-	return false;
-      }
-    auto it1 = list1.begin();
-    auto it2 = list2.begin();
-    auto jt1 = list1.end();
-    while (it1 != jt1)
-      {
-	if (!equals(*it1, *it2))
-	  {
-	    return false;
-	  }
-	++it1;
-	++it2;
-      }
-    return true;
-  }
+	     typename Allocator >
+  bool operator==(const basic_object<Char, Traits, Allocator> &obj,
+		  const basic_char_sequence<Char, Traits> &str);
 
   template < typename Char,
 	     typename Traits,
-	     typename Allocator1,
-	     typename Allocator2 >
-  inline bool equals_map(const basic_object<Char, Traits, Allocator1> &obj1,
-			 const basic_object<Char, Traits, Allocator2> &obj2)
-  {
-    auto &map1 = obj1.get_map();
-    auto &map2 = obj2.get_map();
-    if (map1.size() != map2.size())
-      {
-	return false;
-      }
-    auto it1 = map1.begin();
-    auto jt1 = map1.end();
-    auto jt2 = map2.end();
-    while (it1 != jt1)
-      {
-	auto it2 = map2.find(it1->first);
-	if ((it2 == jt2) || !equals(it1->second, it2->second))
-	  {
-	    return false;
-	  }
-	++it1;
-      }
-    return true;
-  }
+	     typename Allocator >
+  bool operator!=(const basic_object<Char, Traits, Allocator> &obj,
+		  const basic_char_sequence<Char, Traits> &str);
 
   template < typename Char,
 	     typename Traits,
-	     typename Allocator1,
-	     typename Allocator2 >
-  inline bool equals(const basic_object<Char, Traits, Allocator1> &obj1,
-		     const basic_object<Char, Traits, Allocator2> &obj2)
-  {
-    if (!equals_address(obj1, obj2))
-      {
-	if (obj1.type() != obj2.type())
-	  {
-	    return false;
-	  }
-	switch (obj1.type())
-	  {
-	  case type_null:   return true;
-	  case type_string: return equals_string(obj1, obj2);
-	  case type_list:   return equals_list(obj1, obj2);
-	  case type_map:    return equals_map(obj1, obj2);
-	  }
-      }
-    return true;
-  }
+	     typename Allocator >
+  bool operator==(const basic_char_sequence<Char, Traits> &str,
+		  const basic_object<Char, Traits, Allocator> &obj);
 
   template < typename Char,
 	     typename Traits,
-	     typename Allocator1,
-	     typename Allocator2 >
-  inline bool operator==(const basic_object<Char, Traits, Allocator1> &obj1,
-			 const basic_object<Char, Traits, Allocator2> &obj2)
+	     typename Allocator >
+  bool operator!=(const basic_char_sequence<Char, Traits> &str,
+		  const basic_object<Char, Traits, Allocator> &obj);
+
+  inline std::istream &operator>>(std::istream &is, json::object &obj)
   {
-    return equals(obj1, obj2);
+    read_object(is, obj);
+    return is;
   }
 
-  template < typename Char,
-	     typename Traits,
-	     typename Allocator1,
-	     typename Allocator2 >
-  inline bool operator!=(const basic_object<Char, Traits, Allocator1> &obj1,
-			 const basic_object<Char, Traits, Allocator2> &obj2)
+  inline std::ostream &operator<<(std::ostream &os, const json::object &obj)
   {
-    return !(obj1 == obj2);
-  }
-
-  template < typename Char,
-             typename Traits,
-             typename Allocator >
-  inline bool operator==(const basic_object<Char, Traits, Allocator> &obj,
-                         const basic_char_sequence<Char, Traits> &str)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-    return (obj.type() == type_string) && (char_sequence(obj.get_string()) == str);
-  }
-
-  template < typename Char,
-             typename Traits,
-             typename Allocator >
-  inline bool operator!=(const basic_object<Char, Traits, Allocator> &obj,
-                         const basic_char_sequence<Char, Traits> &str)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-    return (obj.type() != type_string) || (char_sequence(obj.get_string()) != str);
-  }
-
-  template < typename Char,
-             typename Traits,
-             typename Allocator >
-  inline bool operator==(const basic_char_sequence<Char, Traits> &str,
-                         const basic_object<Char, Traits, Allocator> &obj)
-  {
-    return obj == str;
-  }
-
-  template < typename Char,
-             typename Traits,
-             typename Allocator >
-  inline bool operator!=(const basic_char_sequence<Char, Traits> &str,
-                         const basic_object<Char, Traits, Allocator> &obj)
-  {
-    return obj != str;
+    write_object(os, obj);
+    return os;
   }
 
 }
 
 namespace std
 {
-
-  template < typename, typename > class basic_ostream;
-  template < typename, typename > class basic_istream;
-
-  template < typename Char, typename Traits, typename Allocator >
-  inline basic_ostream<Char, Traits> &
-  operator<<(basic_ostream<Char, Traits> &out,
-	     const json::basic_object<Char, Traits, Allocator> &obj)
-  {
-    json::write_object(out, obj);
-    return out;
-  }
-
-  template < typename Char, typename Traits, typename Allocator >
-  inline basic_istream<Char, Traits> &
-  operator>>(basic_istream<Char, Traits> &in,
-	     json::basic_object<Char, Traits, Allocator> &obj)
-  {
-    json::read_object(in, obj);
-    return in;
-  }
 
   template < typename Char, typename Traits, typename Allocator >
   inline void swap(json::basic_object<Char, Traits, Allocator> &obj1,

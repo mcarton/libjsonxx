@@ -23,13 +23,12 @@
 int main()
 {
   json::object obj1;
-  json::object obj2;
+  json::object obj2 ( "Hello World\n" );
   json::object obj3;
   json::object obj4;
   json::object obj5;
   json::object obj6;
 
-  obj2 = "Hello World\n";
   obj3 = "-42.6E+10";
   obj4 = obj2;
 

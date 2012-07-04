@@ -20,6 +20,7 @@
 #include <sstream>
 #include "json/error.h"
 #include "json/object.h"
+#include "json/object.tpp"
 
 namespace json
 {
@@ -61,10 +62,6 @@ namespace json
 
 namespace std
 {
-
-  template ostream &operator<<(ostream &, const json::object &);
-
-  template istream &operator>>(istream &, json::object &);
 
   template void swap(json::object &, json::object &);
 
