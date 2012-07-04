@@ -19,7 +19,7 @@
 
 #include <sstream>
 #include "json/error.h"
-#include "json/hash_map.h"
+#include "json/hash_map.hpp"
 
 namespace json
 {

@@ -20,6 +20,7 @@
 #ifndef JSON_TYPES_H
 #define JSON_TYPES_H
 
+#include <iosfwd>
 #include "json/def.h"
 
 namespace json
@@ -37,25 +38,16 @@ namespace json
       type_map
     };
 
-  template < typename, typename, typename > class basic_object;
-
-}
-
-namespace std
-{
-
-  template < typename, typename > class basic_ostream;
-
   template < typename Char, typename Traits >
-  inline basic_ostream<Char, Traits> &
-  operator<<(basic_ostream<Char, Traits> &out, const json::object_type type)
+  inline std::basic_ostream<Char, Traits> &
+  operator<<(std::basic_ostream<Char, Traits> &out, const object_type type)
   {
     switch (type)
       {
-      case json::type_string: return out << "<JSON string>";
-      case json::type_list:   return out << "<JSON list>";
-      case json::type_map:    return out << "<JSON map>";
-      case json::type_null:   return out << "<JSON null>";
+      case type_string: return out << "<JSON string>";
+      case type_list:   return out << "<JSON list>";
+      case type_map:    return out << "<JSON map>";
+      case type_null:   return out << "<JSON null>";
       }
     return out;
   }

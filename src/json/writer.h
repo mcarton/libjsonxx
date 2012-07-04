@@ -29,21 +29,6 @@ namespace json
   template < typename Object, typename Char, typename Traits >
   void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj);
 
-  template < typename String, typename Char, typename Traits >
-  void write_string(std::basic_ostream<Char, Traits> &out, const String &s);
-
-  template < typename List, typename Char, typename Traits >
-  void write_list(std::basic_ostream<Char, Traits> &out, const List &list);
-
-  template < typename Map, typename Char, typename Traits >
-  void write_map(std::basic_ostream<Char, Traits> &out, const Map &map);
-
-  template < typename Pair, typename Char, typename Traits >
-  void write_pair(std::basic_ostream<Char, Traits> &out, const Pair &pair);
-
-  template < typename Char, typename Traits >
-  void write_null(std::basic_ostream<Char, Traits> &out);
-
 }
 
 #endif // JSON_WRITER_H

@@ -17,6 +17,7 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <sstream>
 #include "json/object.h"
 

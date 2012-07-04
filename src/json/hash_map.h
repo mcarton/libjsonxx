@@ -20,22 +20,17 @@
 #ifndef JSON_HASH_MAP_H
 #define JSON_HASH_MAP_H
 
-#include <iostream>
 #include <vector>
 #include <utility>
 #include "json/def.h"
 #include "json/hash_key.h"
 
-#ifndef NDEBUG
-#include <iostream>
-#endif // NDEBUG
+#ifdef JSON_ENABLE_DEBUG
+#include <iosfwd>
+#endif // JSON_ENABLE_DEBUG
 
 namespace json
 {
-
-  void error_hash_map_key_not_found(const void *at,
-				    const void *key,
-				    std::size_t len);
 
   /**
    * @brief A generic hash map optimized for string keys.
@@ -414,109 +409,31 @@ namespace json
 
     typedef basic_iterator<const hash_map, const pair, const_pair_iterator> const_iterator;
 
-    hash_map(const allocator_type &a = allocator_type()):
-      _allocator(a),
-      _size(0),
-      _capacity(0),
-      _table(0)
-    {
-    }
+    hash_map(const allocator_type &a = allocator_type());
 
-    hash_map(const hash_map &map):
-      _allocator(map._allocator),
-      _size(0),
-      _capacity(0),
-      _table(0)
-    {
-      reserve(map._capacity);
-      const_iterator it = map.begin();
-      const_iterator jt = map.end();
-      while (it != jt)
-	{
-	  emplace(it->first, it->second);
-	  ++it;
-	}
-    }
+    hash_map(const hash_map &map);
 
-    hash_map(hash_map &&map):
-      _allocator(),
-      _size(0),
-      _capacity(0),
-      _table(0)
-    {
-      map.swap(*this);
-    }
+    hash_map(hash_map &&map);
 
-    ~hash_map()
-    {
-      clear();
-    }
+    ~hash_map();
 
-    hash_map &operator=(const hash_map &map)
-    {
-      if (this != &map)
-	{
-	  hash_map(map).swap(*this);
-	}
-      return *this;
-    }
+    hash_map &operator=(const hash_map &map);
 
-    hash_map &operator=(hash_map &&map)
-    {
-      map.swap(*this);
-      return *this;
-    }
+    hash_map &operator=(hash_map &&map);
 
-    value_type &operator[](const key_type &key)
-    {
-      iterator it = find(key);
-      if (it == end())
-	{
-	  return emplace(key).second;
-	}
-      return it->second;
-    }
+    value_type &operator[](const key_type &key);
 
-    const value_type &operator[](const key_type &key) const
-    {
-      const_iterator it = find(key);
-      if (it == end())
-	{
-	  error_hash_map_key_not_found(this, key.data(), key.size());
-	}
-      return it->second;
-    }
+    const value_type &operator[](const key_type &key) const;
 
-    allocator_type get_allocator() const
-    {
-      return _allocator;
-    }
+    allocator_type get_allocator() const;
 
-    void swap(hash_map &map)
-    {
-      std::swap(_allocator, map._allocator);
-      std::swap(_size, map._size);
-      std::swap(_capacity, map._capacity);
-      std::swap(_table, map._table);
-    }
+    void swap(hash_map &map);
 
-    size_type size() const
-    {
-      return _size;
-    }
+    size_type size() const;
 
-    bool empty() const
-    {
-      return _size == 0;
-    }
+    bool empty() const;
 
-    void clear()
-    {
-      destroy_table(_table, _capacity);
-      _size = 0;
-      _capacity = 0;
-      _table = 0;
-    }
+    void clear();
 
     template < typename... Args >
     pair &emplace(const key_type &key, Args&&... args)
@@ -546,177 +463,34 @@ namespace json
 	}
     }
 
-    iterator erase(iterator it)
-    {
-      if (it != end())
-	{
-	  slot &s = _table[it._pos];
+    iterator erase(iterator it);
 
-	  if (it._cur == it._end)
-	    {
-	      s.destroy([=](pair &p) { this->destroy_key(p.first); });
-	      it._pos += 1;
-	    }
+    size_type load(size_type extra = 0) const;
 
-	  else
-	    {
-	      pair_iterator &ct = it._cur;
-	      pair_iterator &et = it._end;
-	      destroy_key(ct->first);
-	      ct = s.body.list.erase(ct);
+    iterator begin();
 
-	      if (s.body.list.empty())
-		{
-		  ct = pair_iterator();
-		  et = pair_iterator();
-		  it._pos += 1;
-		  s.make_unset();
-		}
-	      else
-		{
-		  et = s.body.list.end();
-		}
-	    }
+    iterator end();
 
-	  --_size;
-	}
-      return it;
-    }
+    iterator find(const key_type &key);
 
-    size_type load(const size_type extra = 0) const
-    {
-      return ((_size + extra) * 100) / _capacity;
-    }
+    const_iterator begin() const;
 
-    iterator begin()
-    {
-      return iterator( this, 0 );
-    }
+    const_iterator end() const;
 
-    iterator end()
-    {
-      return iterator( this, _capacity );
-    }
+    const_iterator find(const key_type &key) const;
 
-    iterator find(const key_type &key)
-    {
-      return find<iterator>(this, key);
-    }
+    void reserve(size_type n);
 
-    const_iterator begin() const
-    {
-      return const_iterator( this, 0 );
-    }
+    void expand(size_type n = 2);
 
-    const_iterator end() const
-    {
-      return const_iterator( this, _capacity );
-    }
-
-    const_iterator find(const key_type &key) const
-    {
-      return find<const_iterator>(this, key);
-    }
-
-    void reserve(const size_type n)
-    {
-      if (n > _capacity)
-	{
-	  if (_capacity == 0)
-	    {
-	      _table = create_table(n);
-	      _capacity = n;
-	    }
-	  else
-	    {
-	      expand((n / _capacity) + 1);
-	    }
-	}
-    }
-
-    void expand(const size_type n = 2)
-    {
-      if ((n > 1) && (_capacity != 0))
-	{
-	  hash_map m  ( get_allocator() );
-	  iterator it ( begin() );
-	  iterator jt ( end() );
-
-	  m.reserve(n * _capacity);
-	  try
-	    {
-	      while (it != jt)
-		{
-		  m.emplace_at(m.index_of(it->first), it->first, std::move(it->second));
-		  detach_key(it->first);
-		  ++it;
-		}
-	    }
-	  catch (...)
-	    {
-	      // In case something went wrong we roll back the changes, this
-	      // doesn't throw any exception because the internal buckets are
-	      // already allocated.
-	      it = m.begin();
-	      jt = m.end();
-	      while (it != jt)
-		{
-		  emplace_at(m.index_of(it->first), it->first, std::move(it->second));
-		  detach_key(it->first);
-		  ++it;
-		}
-	      throw;
-	    }
-
-	  m.swap(*this);
-	}
-    }
-
-#ifndef NDEBUG
+#ifndef JSON_ENABLE_DEBUG
 
     // This method is implemented for debugging purposes only, it serializes the
     // internal hash map structure into the output stream given as argument.
 
-    void dump(std::basic_ostream<char_type, traits_type> &out) const
-    {
-      slot *it = _table;
-      slot *jt = _table + _capacity;
+    void dump(std::basic_ostream<char_type, traits_type> &out) const;
 
-      out << "{";
-      while (it != jt)
-	{
-	  slot &s = *it;
-
-	  out << " ";
-	  switch (s.type)
-	    {
-	    case slot_unset:
-	      out << "(unset)";
-	      break;
-
-	    case slot_item:
-	      out << s.body.item.first;
-	      break;
-
-	    case slot_list:
-	      auto ct = s.body.list.begin();
-	      auto et = s.body.list.end();
-	      out << "[";
-	      while (ct != et)
-		{
-		  out << " " << ct->first;
-		  ++ct;
-		}
-	      out << " ]";
-	      break;
-	    }
-
-	  ++it;
-	}
-      out << " }";
-      out << std::endl;
-    }
-#endif // NDEBUG
+#endif // JSON_ENABLE_DEBUG
 
   private:
     mutable slot_allocator	_allocator;
@@ -775,55 +549,15 @@ namespace json
       return base.body.item;
     }
 
-    size_type index_of(const key_type &key) const
-    {
-      return key.hash() % _capacity;
-    }
+    size_type index_of(const key_type &key) const;
 
-    slot *create_table(const size_type size) const
-    {
-      slot *table = _allocator.allocate(size);
-      size_type i = 0;
-      size_type j;
-      while (i != size)
-	{
-	  j = i++;
-	  _allocator.construct(table + j);
-	}
-      return table;
-    }
+    slot *create_table(size_type size) const;
 
-    void destroy_table(slot *table, const size_type size) const
-    {
-      slot *ptr = table;
-      slot *end = table + size;
-      while (ptr != end)
-	{
-	  ptr->destroy([=](pair &p) { this->destroy_key(p.first); });
-	  _allocator.destroy(ptr++);
-	}
-      _allocator.deallocate(table, size);
-    }
+    void destroy_table(slot *table, size_type size) const;
 
-    key_type create_key(const key_type &k) const
-    {
-      if (k.size() == 0)
-	{
-	  return k;
-	}
-      char_type *s = get_allocator().allocate(k.size() + 1);
-      std::copy(k.begin(), k.end(), s);
-      s[k.size()] = 0;
-      return key_type( char_sequence_type(s, k.size()) );
-    }
+    key_type create_key(const key_type &k) const;
 
-    void destroy_key(key_type &k) const
-    {
-      if (k.size() != 0)
-	{
-	  get_allocator().deallocate(const_cast<char_type*>(k.data()), k.size());
-	}
-    }
+    void destroy_key(key_type &k) const;
 
     static void detach_key(key_type &k)
     {

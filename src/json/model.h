@@ -20,18 +20,26 @@
 #ifndef JSON_MODEL_H
 #define JSON_MODEL_H
 
+#include <iosfwd>
 #include <sstream>
 #include "json/def.h"
 #include "json/object.h"
+#include "json/hash_map.hpp"
 
+#ifdef JSON_NO_FWD_DCL_STL
+#include <vector>
+#include <deque>
+#include <list>
+#include <map>
+#include <unordered_map>
+#else
 namespace std
 {
 
   // Forward declaration of STL classes, then we don't need to include the
   // entire standard library in this file.
-  template < typename, typename > class basic_istream;
-  template < typename, typename > class basic_ostream;
-  template < typename, typename, typename > class basic_string;
+  // This is done only if the JSON_NO_FWD_DCL_STL macro doesn't exist.
+
   template < typename, typename > class vector;
   template < typename, typename > class deque;
   template < typename, typename > class list;
@@ -39,6 +47,7 @@ namespace std
   template < typename, typename, typename, typename, typename > class unordered_map;
 
 }
+#endif // JSON_NO_FWD_DCL_STL
 
 namespace json
 {

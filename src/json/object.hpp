@@ -20,9 +20,10 @@
 #ifndef JSON_OBJECT_HPP
 #define JSON_OBJECT_HPP
 
-#include "json/object.h"
+#include "json/hash_map.hpp"
 #include "json/reader.hpp"
 #include "json/writer.hpp"
+#include "json/object.h"
 
 namespace json
 {
