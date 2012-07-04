@@ -143,7 +143,7 @@ Sometimes one needs to provide one's own memory allocator, libjson++ follows the
 class is actually a typedef to a template class which makes it easy to customize the memory allocator to be
 used by the object.
 ```c++
-#include "json/object.h"
+#include "json/object.hpp"
 
 template < typename T >
 class json_allocator
@@ -155,7 +155,7 @@ int main()
 {
   typedef json::basic_object< char, std::char_traits<char>, json_allocator<char> > json_object;
   
-  json_allocator a;
+  json_allocator<char> a;
   json_object obj { a };
   
   obj = "Storage for this string will be created by the custom allocator";
