@@ -21,7 +21,6 @@
 #define JSON_BASIC_CHAR_SEQUENCE_H
 
 #include <algorithm>
-#include <string>
 #include <cctype>
 #include <cstring>
 #include "json/def.h"

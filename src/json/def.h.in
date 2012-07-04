@@ -22,6 +22,8 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
+#include <memory>
 
 #define JSON_VERSION_MAJOR      @VERSION_MAJOR@
 #define JSON_VERSION_MINOR      @VERSION_MINOR@
@@ -41,6 +43,14 @@
  */
 namespace json
 {
+
+  // Forward declaration of the json::basic_object template class and type
+  // definition of the default instantiation.
+
+  template < typename, typename, typename > class basic_object;
+
+  typedef basic_object< char, std::char_traits<char>, std::allocator<char> > object;
+
 }
 
 #endif // JSON_DEF_H

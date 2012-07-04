@@ -22,8 +22,6 @@
 
 #include <iosfwd>
 #include <vector>
-#include <string>
-#include <memory>
 #include "json/def.h"
 #include "json/types.h"
 #include "json/for_each.h"
@@ -435,8 +433,6 @@ namespace json
     void assert_type_is(object_type, const char *) const;
 
   };
-
-  typedef basic_object<char> object;
 
   extern template class basic_object<char>;
 

@@ -28,8 +28,6 @@
 namespace json
 {
 
-  template < typename, typename, typename > class basic_object;
-
   template < typename InputIterator, typename Char, typename Traits, typename Allocator >
   void read_object(InputIterator &,
                    InputIterator &,
@@ -333,7 +331,7 @@ namespace json
    *
    * @return The function returns the newly created instance of <em>json::object</em>.
    */
-  basic_object< char, std::char_traits<char>, std::allocator<char> > read(const char *str);
+  object read(const char *str);
 
   /**
    * @brief Reads a JSON object.
@@ -342,7 +340,7 @@ namespace json
    *
    * @return The function returns the newly created instance of <em>json::object</em>.
    */
-  basic_object< char, std::char_traits<char>, std::allocator<char> > read(const char_sequence &str);
+  object read(const char_sequence &str);
 
   /**
    * @brief Reads a JSON object.
@@ -351,7 +349,7 @@ namespace json
    *
    * @return The function returns the newly created instance of <em>json::object</em>.
    */
-  basic_object< char, std::char_traits<char>, std::allocator<char> > read(const std::string &str);
+  object read(const std::string &str);
 
   /**
    * @brief Reads a JSON object.
@@ -360,7 +358,7 @@ namespace json
    *
    * @return The function returns the newly created instance of <em>json::object</em>.
    */
-  basic_object< char, std::char_traits<char>, std::allocator<char> > read(char_sequence &str);
+  object read(char_sequence &str);
 
   /**
    * @brief Reads a JSON object.
@@ -369,7 +367,7 @@ namespace json
    *
    * @return The function returns the newly created instance of <em>json::object</em>.
    */
-  basic_object< char, std::char_traits<char>, std::allocator<char> > read(std::string &str);
+  object read(std::string &str);
 
 }
 
