@@ -17,6 +17,9 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef JSON_OBJECT_HPP
+#define JSON_OBJECT_HPP
+
 #include "json/object.h"
 
 namespace json
@@ -801,3 +804,5 @@ namespace std
   }
 
 }
+
+#endif // JSON_OBJET_HPP
