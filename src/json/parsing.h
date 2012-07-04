@@ -68,11 +68,11 @@ namespace json
   }
 
   template < typename InputIterator >
-  inline void assert_one_digit(const InputIterator &first,
-			       const InputIterator &last,
+  inline void assert_has_digit(const InputIterator &first,
+			       const InputIterator &,
 			       const char *function)
   {
-    if ((first != last) && !std::isdigit(*first))
+    if (!std::isdigit(*first))
       {
 	error_parsing_non_digit(function);
       }
@@ -90,7 +90,7 @@ namespace json
       case '-': sign = -1;
       case '+': ++first;
       }
-    return std::tuple<Number, InputIterator>(sign, first);
+    return std::make_tuple(sign, first);
   }
 
   template < typename Number, typename InputIterator >
@@ -100,14 +100,14 @@ namespace json
   {
     Number value = 0;
     assert_non_empty(first, last, function);
-    assert_one_digit(first, last, function);
+    assert_has_digit(first, last, function);
     while ((first != last) && std::isdigit(*first))
       {
 	value *= 10;
 	value += (*first) - '0';
 	++first;
       }
-    return std::tuple<Number, InputIterator>(value, first);
+    return std::make_tuple(value, first);
   }
 
   template < typename Integer, typename InputIterator >
@@ -171,7 +171,7 @@ namespace json
       {
 	++first;
 	assert_non_empty(first, last, function);
-	assert_one_digit(first, last, function);
+	assert_has_digit(first, last, function);
 	while ((first != last) && std::isdigit(*first))
 	  {
 	    value /= 10;
@@ -179,7 +179,7 @@ namespace json
 	    ++first;
 	  }
       }
-    return std::tuple<Float, InputIterator>(value / 10, first);
+    return std::make_tuple(value / 10, first);
   }
 
   template < typename Float, typename InputIterator >
@@ -196,7 +196,7 @@ namespace json
 	std::tie(sign, first)  = parse_sign<Float>(first, last, function);
 	std::tie(value, first) = parse_integer<Float>(first, last, function);
       }
-    return std::tuple<Float, InputIterator>(sign * value, first);
+    return std::make_tuple(sign * value, first);
   }
 
   template < typename Float, typename InputIterator >
@@ -359,7 +359,7 @@ namespace json
   }
 
   template < typename InputIterator, int N >
-  inline bool __is(InputIterator &first, InputIterator &last, const char (&str)[N])
+  inline bool equals(InputIterator &first, InputIterator &last, const char (&str)[N])
   {
     typedef typename std::size_t index;
     index i;
@@ -376,7 +376,7 @@ namespace json
   template < typename InputIterator >
   inline bool is_json_true(InputIterator first, InputIterator last)
   {
-    return __is(first, last, "true"); 
+    return equals(first, last, "true"); 
   }
 
   template < typename Iterable >
@@ -388,7 +388,7 @@ namespace json
   template < typename InputIterator >
   inline bool is_json_false(InputIterator first, InputIterator last)
   {
-    return __is(first, last, "false"); 
+    return equals(first, last, "false"); 
   }
 
   template < typename Iterable >
