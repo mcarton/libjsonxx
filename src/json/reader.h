@@ -25,25 +25,6 @@
 #include "json/parsing.h"
 #include "json/char_sequence.h"
 
-namespace std
-{
-
-  template < typename, typename > class basic_istream;
-
-  template < typename Char, typename Traits >
-  inline istream_iterator<Char> begin(basic_istream<Char, Traits> &is)
-  {
-    return istream_iterator<Char>(is);
-  }
-
-  template < typename Char, typename Traits >
-  inline istream_iterator<Char> end(basic_istream<Char, Traits> &)
-  {
-    return istream_iterator<Char>();
-  }
-
-}
-
 namespace json
 {
 
@@ -214,7 +195,7 @@ namespace json
   }
 
   template < typename InputIterator, int N >
-  inline void __read(InputIterator &first,InputIterator &last, const char (&str)[N])
+  inline void read_equals(InputIterator &first,InputIterator &last, const char (&str)[N])
   {
     typedef typename std::size_t index;
     for (index i = 0; (first != last) && (i != (N - 1)); ++i)
@@ -226,7 +207,7 @@ namespace json
   template < typename InputIterator >
   inline void read_null(InputIterator &first, InputIterator &last)
   {
-    __read(first, last, "null");
+    read_equals(first, last, "null");
   }
 
   template < typename InputIterator, typename Char, typename Traits, typename Allocator >
@@ -234,7 +215,7 @@ namespace json
                         InputIterator &last,
                         basic_object<Char, Traits, Allocator> &obj)
   {
-    __read(first, last, "true");
+    read_equals(first, last, "true");
     obj = true;
   }
 
@@ -243,7 +224,7 @@ namespace json
                          InputIterator &last,
                          basic_object<Char, Traits, Allocator> &obj)
   {
-    __read(first, last, "false");
+    read_equals(first, last, "false");
     obj = false;
   }
 
@@ -287,9 +268,9 @@ namespace json
   template < typename Iterable, typename Char, typename Traits, typename Allocator >
   inline void read_object(Iterable &iterable, basic_object<Char, Traits, Allocator> &obj)
   {
-    auto beg = std::begin(iterable);
-    auto end = std::end(iterable);
-    read_object<decltype(beg), Char, Traits, Allocator>(beg, end, obj);
+    auto b = begin(iterable);
+    auto e = end(iterable);
+    read_object<decltype(b), Char, Traits, Allocator>(b, e, obj);
   }
 
   /**
@@ -344,9 +325,6 @@ namespace json
     const char_sequence cs ( str, std::strlen(str) );
     return read(cs, a);
   }
-
-  void read_object(std::istream &in,
-                   basic_object< char, std::char_traits<char>, std::allocator<char> > &obj);
 
   /**
    * @brief Reads a JSON object.

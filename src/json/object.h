@@ -382,67 +382,67 @@ namespace json
 
     basic_object &operator=(const short x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const int x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const long x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const long long x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const unsigned short x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const unsigned int x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const unsigned long x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const unsigned long long x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const float x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const double x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
     basic_object &operator=(const long double x)
     {
-      __assign_number(x);
+      assign_number(x);
       return *this;
     }
 
@@ -577,37 +577,37 @@ namespace json
 
     object_string &get_string()
     {
-      __assert_type_is(type_string, "json::basic_object<?>::get_string");
+      assert_type_is(type_string, "json::basic_object<?>::get_string");
       return _body.string;
     }
 
     const object_string &get_string() const
     {
-      __assert_type_is(type_string, "json::basic_object<?>::get_string");
+      assert_type_is(type_string, "json::basic_object<?>::get_string");
       return _body.string;
     }
 
     object_list &get_list()
     {
-      __assert_type_is(type_list, "json::basic_object<?>::get_list");
+      assert_type_is(type_list, "json::basic_object<?>::get_list");
       return _body.list;
     }
 
     const object_list &get_list() const
     {
-      __assert_type_is(type_list, "json::basic_object<?>::get_list");
+      assert_type_is(type_list, "json::basic_object<?>::get_list");
       return _body.list;
     }
 
     object_map &get_map()
     {
-      __assert_type_is(type_map, "json::basic_object<?>::get_map");
+      assert_type_is(type_map, "json::basic_object<?>::get_map");
       return _body.map;
     }
 
     const object_map &get_map() const
     {
-      __assert_type_is(type_map, "json::basic_object<?>::get_map");
+      assert_type_is(type_map, "json::basic_object<?>::get_map");
       return _body.map;
     }
 
@@ -665,14 +665,14 @@ namespace json
     object_body		_body;
 
     template < typename Integer >
-    void __assign_number(const Integer x)
+    void assign_number(const Integer x)
     {
       object_string s ( to_string<char_type, traits_type>(x, _allocator) );
       _body.assign_string(_type, std::move(s), _allocator);
       _type = type_string;
     }
 
-    void __assert_type_is(const object_type type, const char *function) const
+    void assert_type_is(const object_type type, const char *function) const
     {
       if (type != _type)
 	{
@@ -728,76 +728,111 @@ namespace json
 	     typename Traits,
 	     typename Allocator1,
 	     typename Allocator2 >
-  inline bool operator==(const basic_object<Char, Traits, Allocator1> &obj1,
-			 const basic_object<Char, Traits, Allocator2> &obj2)
+  inline bool equals_address(const basic_object<Char, Traits, Allocator1> &obj1,
+			     const basic_object<Char, Traits, Allocator2> &obj2)
+  {
+    return std::addressof(obj1) == std::addressof(obj2);
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  inline bool equals_string(const basic_object<Char, Traits, Allocator1> &obj1,
+			    const basic_object<Char, Traits, Allocator2> &obj2)
   {
     typedef basic_char_sequence<Char, Traits> char_sequence;
+    return char_sequence(obj1.get_string()) == char_sequence(obj2.get_string());
+  }
 
-    if (((const void *) &obj1) == ((const void *) &obj2))
-      {
-	return true;
-      }
-
-    if (obj1.type() != obj2.type())
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  inline bool equals_list(const basic_object<Char, Traits, Allocator1> &obj1,
+			  const basic_object<Char, Traits, Allocator2> &obj2)
+  {
+    auto &list1 = obj1.get_list();
+    auto &list2 = obj2.get_list();
+    if (list1.size() != list2.size())
       {
 	return false;
       }
-
-    switch (obj1.type())
+    auto it1 = list1.begin();
+    auto it2 = list2.begin();
+    auto jt1 = list1.end();
+    while (it1 != jt1)
       {
-
-      case type_null:
-	return true;
-
-      case type_string:
-	return char_sequence(obj1.get_string()) == char_sequence(obj2.get_string());
-
-      case type_list:
-	{
-	  auto &list1 = obj1.get_list();
-	  auto &list2 = obj2.get_list();
-	  if (list1.size() != list2.size())
-	    {
-	      return false;
-	    }
-	  auto it1 = list1.begin();
-	  auto it2 = list2.begin();
-	  auto jt1 = list1.end();
-	  while (it1 != jt1)
-	    {
-	      if ((*it1) != (*it2))
-		{
-		  return false;
-		}
-	      ++it1;
-	      ++it2;
-	    }
-	}
-
-      case type_map:
-	{
-	  auto &map1 = obj1.get_map();
-	  auto &map2 = obj2.get_map();
-	  if (map1.size() != map2.size())
-	    {
-	      return false;
-	    }
-	  auto it1 = map1.begin();
-	  auto jt1 = map1.end();
-	  auto jt2 = map2.end();
-	  while (it1 != jt1)
-	    {
-	      auto it2 = map2.find(it1->first);
-	      if ((it2 == jt2) || (it1->second != it2->second))
-		{
-		  return false;
-		}
-	      ++it1;
-	    }
-	}
-
+	if (!equals(*it1, *it2))
+	  {
+	    return false;
+	  }
+	++it1;
+	++it2;
       }
     return true;
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  inline bool equals_map(const basic_object<Char, Traits, Allocator1> &obj1,
+			 const basic_object<Char, Traits, Allocator2> &obj2)
+  {
+    auto &map1 = obj1.get_map();
+    auto &map2 = obj2.get_map();
+    if (map1.size() != map2.size())
+      {
+	return false;
+      }
+    auto it1 = map1.begin();
+    auto jt1 = map1.end();
+    auto jt2 = map2.end();
+    while (it1 != jt1)
+      {
+	auto it2 = map2.find(it1->first);
+	if ((it2 == jt2) || !equals(it1->second, it2->second))
+	  {
+	    return false;
+	  }
+	++it1;
+      }
+    return true;
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  inline bool equals(const basic_object<Char, Traits, Allocator1> &obj1,
+		     const basic_object<Char, Traits, Allocator2> &obj2)
+  {
+    if (!equals_address(obj1, obj2))
+      {
+	if (obj1.type() != obj2.type())
+	  {
+	    return false;
+	  }
+	switch (obj1.type())
+	  {
+	  case type_null:   return true;
+	  case type_string: return equals_string(obj1, obj2);
+	  case type_list:   return equals_list(obj1, obj2);
+	  case type_map:    return equals_map(obj1, obj2);
+	  }
+      }
+    return true;
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  inline bool operator==(const basic_object<Char, Traits, Allocator1> &obj1,
+			 const basic_object<Char, Traits, Allocator2> &obj2)
+  {
+    return equals(obj1, obj2);
   }
 
   template < typename Char,

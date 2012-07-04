@@ -23,6 +23,7 @@
 #include <tuple>
 #include <cmath>
 #include <cctype>
+#include <iosfwd>
 #include <iterator>
 #include "json/def.h"
 
@@ -32,6 +33,30 @@ namespace json
   void error_parsing_non_empty_end(const char *function);
   void error_parsing_empty_number(const char *function);
   void error_parsing_non_digit(const char *function);
+
+  template < typename Iterable >
+  auto begin(Iterable &&it) -> decltype(std::begin(*it))
+  {
+    return std::begin(*it);
+  }
+
+  template < typename Iterable >
+  auto end(Iterable &&it) -> decltype(std::end(*it))
+  {
+    return std::end(*it);
+  }
+
+  template < typename Char, typename Traits >
+  inline std::istream_iterator<Char> begin(std::basic_istream<Char, Traits> &is)
+  {
+    return std::istream_iterator<Char>(is);
+  }
+
+  template < typename Char, typename Traits >
+  inline std::istream_iterator<Char> end(std::basic_istream<Char, Traits> &)
+  {
+    return std::istream_iterator<Char>();
+  }
 
   template < typename T >
   constexpr inline bool one_of(T &&)

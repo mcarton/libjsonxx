@@ -140,7 +140,7 @@ namespace json
   }
 
   template < typename List, typename Char, typename Traits, typename Allocator2 >
-  inline void __load_list(List &field, const basic_object<Char, Traits, Allocator2> &obj)
+  inline void load_list(List &field, const basic_object<Char, Traits, Allocator2> &obj)
   {
     if (obj.type() == type_list)
       {
@@ -164,29 +164,29 @@ namespace json
   inline void operator<<(std::vector<T, Allocator1> &field,
                          const basic_object<Char, Traits, Allocator2> &obj)
   {
-    __load_list(field, obj);
+    load_list(field, obj);
   }
 
   template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
   inline void operator<<(std::deque<T, Allocator1> &field,
                          const basic_object<Char, Traits, Allocator2> &obj)
   {
-    __load_list(field, obj);
+    load_list(field, obj);
   }
 
   template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
   inline void operator<<(std::list<T, Allocator1> &field,
                          const basic_object<Char, Traits, Allocator2> &obj)
   {
-    __load_list(field, obj);
+    load_list(field, obj);
   }
 
   template < typename Map, typename Char, typename Traits, typename Allocator >
-  inline void __load_map(Map &field, const basic_object<Char, Traits, Allocator> &obj)
+  inline void load_map(Map &field, const basic_object<Char, Traits, Allocator> &obj)
   {
     if (obj.type() == type_map)
       {
-        // TODO: see __dump_map.
+        // TODO: see dump_map.
         std::basic_stringstream<Char, Traits, typename Map::allocator_type> buffer;
 
         auto it = obj.begin();
@@ -219,7 +219,7 @@ namespace json
   inline void operator<<(std::map<Key, Value, Compare, Allocator1> &field,
                          const basic_object<Char, Traits, Allocator2> &obj)
   {
-    __load_map(field, obj);
+    load_map(field, obj);
   }
 
   template < typename Key,
@@ -233,7 +233,7 @@ namespace json
   inline void operator<<(std::unordered_map<Key, Value, Hash, Equal, Allocator1> &field,
                          const basic_object<Char, Traits, Allocator2> &obj)
   {
-    __load_map(field, obj);
+    load_map(field, obj);
   }
 
   // Overloading of the '>>' operator to provide a way to build JSON objects
@@ -246,7 +246,7 @@ namespace json
   }
 
   template < typename List, typename Char, typename Traits, typename Allocator2 >
-  inline void __dump_list(const List &field, basic_object<Char, Traits, Allocator2> &obj)
+  inline void dump_list(const List &field, basic_object<Char, Traits, Allocator2> &obj)
   {
     std::size_t i = 0;
     obj.make_list();
@@ -264,25 +264,25 @@ namespace json
   inline void operator>>(const std::vector<T, Allocator1> &field,
                          basic_object<Char, Traits, Allocator2> &obj)
   {
-    __dump_list(field, obj);
+    dump_list(field, obj);
   }
 
   template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
   inline void operator>>(const std::deque<T, Allocator1> &field,
                          basic_object<Char, Traits, Allocator2> &obj)
   {
-    __dump_list(field, obj);
+    dump_list(field, obj);
   }
 
   template < typename T, typename Allocator1, typename Char, typename Traits, typename Allocator2 >
   inline void operator>>(const std::list<T, Allocator1> &field,
                          basic_object<Char, Traits, Allocator2> &obj)
   {
-    __dump_list(field, obj);
+    dump_list(field, obj);
   }
 
   template < typename Map, typename Char, typename Traits, typename Allocator >
-  inline void __dump_map(const Map &field, basic_object<Char, Traits, Allocator> &obj)
+  inline void dump_map(const Map &field, basic_object<Char, Traits, Allocator> &obj)
   {
     // TODO: implement a string stream object that allows to specify the allocator
     // when building the object.
@@ -312,7 +312,7 @@ namespace json
   inline void operator>>(const std::map<Key, Value, Compare, Allocator1> &field,
                          basic_object<Char, Traits, Allocator2> &obj)
   {
-    __dump_map(field, obj);
+    dump_map(field, obj);
   }
 
   template < typename Key,
@@ -326,7 +326,7 @@ namespace json
   inline void operator>>(const std::unordered_map<Key, Value, Hash, Equal, Allocator1> &field,
                          basic_object<Char, Traits, Allocator2> &obj)
   {
-    __dump_map(field, obj);
+    dump_map(field, obj);
   }
 
   template < typename Class,

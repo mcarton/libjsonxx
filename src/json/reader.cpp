@@ -35,14 +35,7 @@ namespace json
     throw error("json::read_object: invalid non-JSON input");
   }
 
-  void read_object(std::istream &in, object &obj)
-  {
-    typedef std::char_traits<char> char_traits;
-    typedef std::allocator<char> char_allocator;
-    std::istream_iterator<char> beg ( std::begin(in) );
-    std::istream_iterator<char> end ( std::end(in) );
-    read_object<std::istream_iterator<char>, char, char_traits, char_allocator>(beg, end, obj);
-  }
+  template void read_object(std::istream &, object &);
 
   object read(const char *str)
   {

@@ -266,7 +266,7 @@ namespace json
       _size(s)
     {
       _body.create_list(it);
-      _set_curosor();
+      set_cursor();
     }
 
     iterator(const MapIterator &it, const size_type i, const size_type s):
@@ -277,7 +277,7 @@ namespace json
       _size(s)
     {
       _body.create_map(it);
-      _set_curosor();
+      set_cursor();
     }
 
     iterator(const iterator &it):
@@ -288,7 +288,7 @@ namespace json
       _size(it._size)
     {
       _body.create_copy(it._type, it._body);
-      _set_curosor();
+      set_cursor();
     }
 
     iterator(iterator &&it):
@@ -299,7 +299,7 @@ namespace json
       _size(it._size)
     {
       _body.create_move(it._type, std::move(it._body));
-      _set_curosor();
+      set_cursor();
     }
 
     ~iterator()
@@ -323,7 +323,7 @@ namespace json
     {
       ++_index;
       _body.increment(_type);
-      _set_curosor();
+      set_cursor();
       return *this;
     }
 
@@ -372,8 +372,8 @@ namespace json
       std::swap(_index, it._index);
       std::swap(_size, it._size);
 
-      _set_curosor();
-      it._set_curosor();
+      set_cursor();
+      it.set_cursor();
     }
 
   private:
@@ -383,7 +383,7 @@ namespace json
     size_type           _index;
     size_type           _size;
 
-    void _set_curosor()
+    void set_cursor()
     {
       if (_index != _size)
         {

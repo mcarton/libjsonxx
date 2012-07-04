@@ -45,7 +45,7 @@ namespace json
     auto jt = s.end();
     while (it != jt)
       {
-	h = hash_one(*it, h);
+	h = hash_one(Traits::to_int_type(*it), h);
 	++it;
       }
     return h;
@@ -72,39 +72,39 @@ namespace json
 
   public:
 
-    typedef typename char_sequence::traits_type	traits_type;
-    typedef typename char_sequence::char_type	char_type;
-    typedef typename char_sequence::size_type	size_type;
-    typedef basic_char_sequence<Char, Traits>   char_sequence_type;
+    typedef basic_char_sequence<Char, Traits>		char_sequence_type;
+    typedef typename char_sequence_type::traits_type	traits_type;
+    typedef typename char_sequence_type::char_type	char_type;
+    typedef typename char_sequence_type::size_type	size_type;
 
     hash_key():
-      char_sequence(),
+      char_sequence_type(),
       _hash(hash_init)
     {
     }
 
     hash_key(const hash_key &k):
-      char_sequence(k),
+      char_sequence_type(k),
       _hash(k._hash)
     {
     }
 
-    hash_key(const char_sequence &s):
-      char_sequence(s),
+    hash_key(const char_sequence_type &s):
+      char_sequence_type(s),
       _hash(json::hash(s))
     {
     }
 
     hash_key &operator=(const hash_key &k)
     {
-      char_sequence::operator=(k);
+      char_sequence_type::operator=(k);
       _hash = k._hash;
       return *this;
     }
 
-    hash_key &operator=(const char_sequence &s)
+    hash_key &operator=(const char_sequence_type &s)
     {
-      char_sequence::operator=(s);
+      char_sequence_type::operator=(s);
       _hash = json::hash(s);
       return *this;
     }
@@ -117,7 +117,7 @@ namespace json
     template < typename _Char, typename _Traits >
     bool equals(const hash_key<_Char, _Traits> &k) const
     {
-      return (hash() == k.hash()) && char_sequence::equals(k);
+      return (hash() == k.hash()) && char_sequence_type::equals(k);
     }
 
   protected:
