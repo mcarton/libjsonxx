@@ -20,7 +20,7 @@
 #include <sstream>
 #include "json/error.h"
 #include "json/object.h"
-#include "json/object.tpp"
+#include "json/object.hpp"
 
 namespace json
 {

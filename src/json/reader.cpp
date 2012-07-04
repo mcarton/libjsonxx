@@ -20,7 +20,7 @@
 #include <string>
 #include "json/error.h"
 #include "json/reader.h"
-#include "json/object.tpp"
+#include "json/object.hpp"
 
 namespace json
 {
