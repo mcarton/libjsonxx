@@ -21,9 +21,16 @@
 #define JSON_OBJECT_HPP
 
 #include "json/object.h"
+#include "json/reader.hpp"
+#include "json/writer.hpp"
 
 namespace json
 {
+
+  void error_json_object_invalid_type(const void *at,
+				      object_type expected,
+				      object_type found,
+				      const char *function);
 
   template < typename Char, typename Traits, typename Allocator >
   basic_object<Char, Traits, Allocator>::
@@ -773,21 +780,9 @@ namespace json
     return obj != str;
   }
 
-}
-
-namespace std
-{
-
-  // Some say this is not good practice to forward declare STL classes but if
-  // we want to provide template '<<' and '>>' operators for any stream types
-  // we have no other choice...
-
-  template < typename, typename > class basic_ostream;
-  template < typename, typename > class basic_istream;
-
   template < typename Char, typename Traits, typename Allocator >
-  inline basic_ostream<Char, Traits> &
-  operator<<(basic_ostream<Char, Traits> &out,
+  std::basic_ostream<Char, Traits> &
+  operator<<(std::basic_ostream<Char, Traits> &out,
 	     const json::basic_object<Char, Traits, Allocator> &obj)
   {
     json::write_object(out, obj);
@@ -795,11 +790,11 @@ namespace std
   }
 
   template < typename Char, typename Traits, typename Allocator >
-  inline basic_istream<Char, Traits> &
-  operator>>(basic_istream<Char, Traits> &in,
+  std::basic_istream<Char, Traits> &
+  operator>>(std::basic_istream<Char, Traits> &in,
 	     json::basic_object<Char, Traits, Allocator> &obj)
   {
-    json::read_object(in, obj);
+    read_object(in, obj);
     return in;
   }
 

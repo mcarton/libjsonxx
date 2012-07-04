@@ -18,7 +18,7 @@
  */
 
 #include <ostream>
-#include "json/writer.h"
+#include "json/writer.hpp"
 #include "json/object.hpp"
 
 namespace json

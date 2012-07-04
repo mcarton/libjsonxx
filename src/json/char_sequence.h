@@ -17,8 +17,8 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JSON_BASIC_CHAR_SEQUENCE_H
-#define JSON_BASIC_CHAR_SEQUENCE_H
+#ifndef JSON_CHAR_SEQUENCE_H
+#define JSON_CHAR_SEQUENCE_H
 
 #include <algorithm>
 #include <cctype>
@@ -188,8 +188,7 @@ namespace json
       return (((void *)this) == ((void *)&s)) || ((size() == s.size()) && (compare(s) == 0));
     }
 
-    template < typename _Char, typename _Traits >
-    int compare(const basic_char_sequence<_Char, _Traits> &s) const
+    int compare(const basic_char_sequence &s) const
     {
       auto it1 = begin();
       auto it2 = s.begin();

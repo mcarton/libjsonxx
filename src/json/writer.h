@@ -20,140 +20,29 @@
 #ifndef JSON_WRITER_H
 #define JSON_WRITER_H
 
+#include <iosfwd>
 #include "json/def.h"
-#include "json/types.h"
-#include "json/parsing.h"
-#include "json/char_sequence.h"
-
-namespace std
-{
-
-  template < typename, typename > class basic_ostream;
-
-}
 
 namespace json
 {
 
   template < typename Object, typename Char, typename Traits >
-  inline void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-
-    switch (obj.type())
-      {
-
-      case type_string:
-	write_string(out, char_sequence(obj.get_string()));
-	break;
-
-      case type_list:
-	write_list(out, obj.get_list());
-	break;
-
-      case type_map:
-	write_map(out, obj.get_map());
-	break;
-
-      case type_null:
-	write_null(out);
-	break;
-
-      }
-  }
+  void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj);
 
   template < typename String, typename Char, typename Traits >
-  inline void write_string(std::basic_ostream<Char, Traits> &out, const String &s)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-    if (is_json_boolean(s) || is_json_number(s))
-      {
-	out << s;
-      }
-    else
-      {
-	out << '"';
-
-	auto it = s.begin();
-	auto jt = s.end();
-
-	while (it != jt)
-	  {
-	    switch (*it)
-	      {
-	      case '"':  out << '\\' << '\"'; break;
-	      case '\\': out << '\\' << '\\'; break;
-	      case '\b': out << '\\' << 'b';  break; 
-	      case '\f': out << '\\' << 'f';  break; 
-	      case '\n': out << '\\' << 'n';  break;
-	      case '\r': out << '\\' << 'r';  break;
-	      case '\t': out << '\\' << 't';  break;
-	      default: out << *it;            break;
-	      }
-	    ++it;
-	  }
-	      
-	out << '"';
-      }
-  }
+  void write_string(std::basic_ostream<Char, Traits> &out, const String &s);
 
   template < typename List, typename Char, typename Traits >
-  inline void write_list(std::basic_ostream<Char, Traits> &out, const List &list)
-  {
-    out << '[';
-
-    if (!list.empty())
-      {
-	auto it = list.begin();
-	auto jt = list.end();
-
-	write_object(out, *it);
-
-	while ((++it) != jt)
-	  {
-	    out << ',';
-	    write_object(out, *it);
-	  }
-      }
-
-    out << ']';
-  }
+  void write_list(std::basic_ostream<Char, Traits> &out, const List &list);
 
   template < typename Map, typename Char, typename Traits >
-  inline void write_map(std::basic_ostream<Char, Traits> &out, const Map &map)
-  {
-    out << '{';
-
-    if (!map.empty())
-      {
-	auto it = map.begin();
-	auto jt = map.end();
-
-	write_pair(out, *it);
-
-	while ((++it) != jt)
-	  {
-	    out << ',';
-	    write_pair(out, *it);
-	  }
-      }
-
-    out << '}';
-  }
+  void write_map(std::basic_ostream<Char, Traits> &out, const Map &map);
 
   template < typename Pair, typename Char, typename Traits >
-  inline void write_pair(std::basic_ostream<Char, Traits> &out, const Pair &pair)
-  {
-    write_string(out, pair.first);
-    out << ':';
-    write_object(out, pair.second);
-  }
+  void write_pair(std::basic_ostream<Char, Traits> &out, const Pair &pair);
 
   template < typename Char, typename Traits >
-  inline void write_null(std::basic_ostream<Char, Traits> &out)
-  {
-    out << "null";
-  }
+  void write_null(std::basic_ostream<Char, Traits> &out);
 
 }
 

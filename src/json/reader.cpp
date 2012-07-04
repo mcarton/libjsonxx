@@ -18,7 +18,7 @@
  */
 
 #include "json/error.h"
-#include "json/reader.h"
+#include "json/reader.hpp"
 #include "json/object.hpp"
 
 namespace json

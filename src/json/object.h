@@ -35,11 +35,6 @@
 namespace json
 {
 
-  void error_json_object_invalid_type(const void *at,
-				      object_type expected,
-				      object_type found,
-				      const char *function);
-
   /**
    * @brief Implementation of a JSON object.
    *
