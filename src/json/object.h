@@ -468,13 +468,13 @@ namespace json
   template < typename Char, typename Traits, typename Allocator >
   inline bool is_true(const basic_object<Char, Traits, Allocator> &obj)
   {
-    return (obj.type() == type_string) && is_json_true(obj.get_string());
+    return (obj.type() == type_string) && is_json_true(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline bool is_false(const basic_object<Char, Traits, Allocator> &obj)
   {
-    return (obj.type() == type_string) && is_json_false(obj.get_string());
+    return (obj.type() == type_string) && is_json_false(obj);
   }
 
   template < typename Char,
