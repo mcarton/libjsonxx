@@ -25,11 +25,6 @@ namespace json
 
   template class basic_char_sequence<char>;
 
-}
-
-namespace std
-{
-
-  template ostream &operator<<(ostream &, const json::char_sequence &);
+  template std::ostream &operator<<(std::ostream &, const char_sequence &);
 
 }

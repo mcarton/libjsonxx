@@ -744,6 +744,38 @@ namespace json
 
   };
 
+  template < typename Class, typename Char, typename Traits, typename Allocator >
+  inline model_istream<Class, Char, Traits, Allocator>
+  operator>>(std::basic_istream<Char, Traits> &in,
+             const model<Class, Char, Traits, Allocator> &model)
+  {
+    return model_istream<Class, Char, Traits, Allocator>(in, model);
+  }
+
+  template < typename Class, typename Char, typename Traits, typename Allocator >
+  inline std::basic_istream<Char, Traits> &
+  operator>>(const model_istream<Class, Char, Traits, Allocator> &in,
+             Class &instance)
+  {
+    return in(instance);
+  }
+
+  template < typename Class, typename Char, typename Traits, typename Allocator >
+  inline model_ostream<Class, Char, Traits, Allocator>
+  operator<<(std::basic_ostream<Char, Traits> &out,
+             const model<Class, Char, Traits, Allocator> &model)
+  {
+    return json::model_ostream<Class, Char, Traits, Allocator>(out, model);
+  }
+
+  template < typename Class, typename Char, typename Traits, typename Allocator >
+  inline std::basic_ostream<Char, Traits> &
+  operator<<(const model_ostream<Class, Char, Traits, Allocator> &out,
+             const Class &instance)
+  {
+    return out(instance);
+  }
+
 }
 
 namespace std
@@ -754,38 +786,6 @@ namespace std
                    json::model<Class, Char, Traits, Allocator> &m2)
   {
     m1.swap(m2);
-  }
-
-  template < typename Class, typename Char, typename Traits, typename Allocator >
-  inline json::model_istream<Class, Char, Traits, Allocator>
-  operator>>(basic_istream<Char, Traits> &in,
-             const json::model<Class, Char, Traits, Allocator> &model)
-  {
-    return json::model_istream<Class, Char, Traits, Allocator>(in, model);
-  }
-
-  template < typename Class, typename Char, typename Traits, typename Allocator >
-  inline basic_istream<Char, Traits> &
-  operator>>(const json::model_istream<Class, Char, Traits, Allocator> &in,
-             Class &instance)
-  {
-    return in(instance);
-  }
-
-  template < typename Class, typename Char, typename Traits, typename Allocator >
-  inline json::model_ostream<Class, Char, Traits, Allocator>
-  operator<<(basic_ostream<Char, Traits> &out,
-             const json::model<Class, Char, Traits, Allocator> &model)
-  {
-    return json::model_ostream<Class, Char, Traits, Allocator>(out, model);
-  }
-
-  template < typename Class, typename Char, typename Traits, typename Allocator >
-  inline basic_ostream<Char, Traits> &
-  operator<<(const json::model_ostream<Class, Char, Traits, Allocator> &out,
-             const Class &instance)
-  {
-    return out(instance);
   }
 
 }

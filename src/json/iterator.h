@@ -106,11 +106,15 @@ namespace json
     union iterator_body
     {
 
+      bool           dummy;
       ListIterator   list;
       MapIterator    map;
 
       iterator_body()
       {
+	// This is required to avoid GCC complaining about non-initialized
+	// fields (see -Wuninitialized).
+	new (&dummy) bool (false);
       }
 
       ~iterator_body()
@@ -249,132 +253,35 @@ namespace json
 
     };
 
-    iterator():
-      _type(type_null),
-      _body(),
-      _cursor(),
-      _index(0),
-      _size(0)
-    {
-    }
+    iterator();
 
-    iterator(const ListIterator &it, const size_type i, const size_type s):
-      _type(type_list),
-      _body(),
-      _cursor(),
-      _index(i),
-      _size(s)
-    {
-      _body.create_list(it);
-      set_cursor();
-    }
+    iterator(const ListIterator &it, const size_type i, const size_type s);
 
-    iterator(const MapIterator &it, const size_type i, const size_type s):
-      _type(type_map),
-      _body(),
-      _cursor(),
-      _index(i),
-      _size(s)
-    {
-      _body.create_map(it);
-      set_cursor();
-    }
+    iterator(const MapIterator &it, const size_type i, const size_type s);
 
-    iterator(const iterator &it):
-      _type(it._type),
-      _body(),
-      _cursor(),
-      _index(it._index),
-      _size(it._size)
-    {
-      _body.create_copy(it._type, it._body);
-      set_cursor();
-    }
+    iterator(const iterator &it);
 
-    iterator(iterator &&it):
-      _type(it._type),
-      _body(),
-      _cursor(),
-      _index(it._index),
-      _size(it._size)
-    {
-      _body.create_move(it._type, std::move(it._body));
-      set_cursor();
-    }
+    iterator(iterator &&it);
 
-    ~iterator()
-    {
-      _body.destroy(_type);
-    }
+    ~iterator();
 
-    iterator &operator=(const iterator &it)
-    {
-      iterator(it).swap(*this);
-      return *this;
-    }
+    iterator &operator=(const iterator &it);
 
-    iterator &operator=(iterator &&it)
-    {
-      it.swap(*this);
-      return *this;
-    }
+    iterator &operator=(iterator &&it);
 
-    iterator &operator++()
-    {
-      ++_index;
-      _body.increment(_type);
-      set_cursor();
-      return *this;
-    }
+    iterator &operator++();
 
-    iterator operator++(int)
-    {
-      const iterator it ( *this );
-      ++(*this);
-      return it;
-    }
+    iterator operator++(int);
 
-    bool operator==(const iterator &it) const
-    {
-      return (_type == it._type) && _body.equals(_type, it._body);
-    }
+    bool operator==(const iterator &it) const;
 
-    bool operator!=(const iterator &it) const
-    {
-      return (_type != it._type) || _body.not_equals(_type, it._body);
-    }
+    bool operator!=(const iterator &it) const;
 
-    const value_type &operator*() const
-    {
-      return _cursor;
-    }
+    const value_type &operator*() const;
 
-    const value_type *operator->() const
-    {
-      return &_cursor;
-    }
+    const value_type *operator->() const;
 
-    void swap(iterator &it)
-    {
-      iterator_body tmp;
-
-      tmp.create_move(_type, std::move(_body));
-      
-      _body.destroy(_type);
-      _body.create_move(it._type, std::move(it._body));
-      
-      it._body.destroy(it._type);
-      it._body.create_move(_type, std::move(tmp));
-
-      tmp.destroy(_type);
-
-      std::swap(_type, it._type);
-      std::swap(_index, it._index);
-      std::swap(_size, it._size);
-
-      set_cursor();
-      it.set_cursor();
-    }
+    void swap(iterator &it);
 
   private:
     object_type		_type;
@@ -383,20 +290,7 @@ namespace json
     size_type           _index;
     size_type           _size;
 
-    void set_cursor()
-    {
-      if (_index != _size)
-        {
-          _cursor.~value_type();
-          switch (_type)
-            {
-            case type_list:   new (&_cursor) value_type (*(_body.list)); break;
-            case type_map:    new (&_cursor) value_type ((*_body.map).first, (*_body.map).second); break;
-            case type_string:
-            case type_null:   new (&_cursor) value_type (); break;
-            }
-        }
-    }
+    void set_cursor();
 
   };
 

@@ -431,6 +431,14 @@ namespace json
 
   extern template class basic_object<char>;
 
+  extern template class iterator<object,
+				 object::object_list::iterator,
+				 object::object_map::iterator>;
+
+  extern template class iterator<const object,
+				 object::object_list::const_iterator,
+				 object::object_map::const_iterator>;
+
   extern const object null;
 
   template < typename Char, typename Traits, typename Allocator >

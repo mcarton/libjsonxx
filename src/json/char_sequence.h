@@ -20,7 +20,7 @@
 #ifndef JSON_CHAR_SEQUENCE_H
 #define JSON_CHAR_SEQUENCE_H
 
-#include <algorithm>
+#include <iosfwd>
 #include <cctype>
 #include <cstring>
 #include "json/def.h"
@@ -197,7 +197,10 @@ namespace json
 
       while ((it1 != jt1) && (it2 != jt2))
 	{
-	  switch (std::min(jt1 - it1, jt2 - it2) % 8)
+	  const auto x1 = jt1 - it1;
+	  const auto x2 = jt2 - it2;
+	  const auto x3 = (x1 < x2) ? x1 : x2;
+	  switch (x3 % 8)
 	    {
 	    case 0: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
 	    case 7: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
@@ -291,18 +294,11 @@ namespace json
 
   extern template class basic_char_sequence<char>;
 
-}
-
-namespace std
-{
-
-  template < typename, typename > class basic_ostream;
-
   template < typename Char, typename Traits >
   inline
-  basic_ostream<Char, Traits> &
-  operator<<(basic_ostream<Char, Traits> &out,
-	     const json::basic_char_sequence<Char, Traits> &s)
+  std::basic_ostream<Char, Traits> &
+  operator<<(std::basic_ostream<Char, Traits> &out,
+	     const basic_char_sequence<Char, Traits> &s)
   {
     return out.write(s.data(), s.length());
   }

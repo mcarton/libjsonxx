@@ -21,6 +21,7 @@
 #define JSON_STRING_H
 
 #include <cmath>
+#include <limits>
 #include "json/def.h"
 
 namespace json

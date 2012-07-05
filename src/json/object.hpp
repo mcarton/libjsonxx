@@ -21,6 +21,7 @@
 #define JSON_OBJECT_HPP
 
 #include "json/hash_map.hpp"
+#include "json/iterator.hpp"
 #include "json/reader.hpp"
 #include "json/writer.hpp"
 #include "json/object.h"

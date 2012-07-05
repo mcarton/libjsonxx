@@ -18,6 +18,7 @@
  */
 
 #include "json/error.h"
+#include "json/object.hpp"
 
 namespace json
 {
@@ -26,5 +27,16 @@ namespace json
   {
     throw error("json::iterator::operator++: null iterator cannot be incremented");
   }
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuninitialized"
+  template class iterator<object,
+			  object::object_list::iterator,
+			  object::object_map::iterator>;
+
+  template class iterator<const object,
+			  object::object_list::const_iterator,
+			  object::object_map::const_iterator>;
+#pragma GCC diagnostic pop
 
 }

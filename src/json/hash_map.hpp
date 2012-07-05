@@ -430,8 +430,8 @@ namespace json
 
 	++it;
       }
-    out << " }";
-    out << std::endl;
+    out << " }\n";
+    out.flush();
   }
 
 #endif // JSON_ENABLE_DEBUG
