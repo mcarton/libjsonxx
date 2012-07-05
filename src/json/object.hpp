@@ -20,6 +20,7 @@
 #ifndef JSON_OBJECT_HPP
 #define JSON_OBJECT_HPP
 
+#include "json/parsing.hpp"
 #include "json/hash_map.hpp"
 #include "json/iterator.hpp"
 #include "json/reader.hpp"

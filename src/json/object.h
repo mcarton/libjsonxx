@@ -542,37 +542,37 @@ namespace std
   template < typename Char, typename Traits, typename Allocator >
   inline int stoi(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stoi(obj.get_string());
+    return json::stoi(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline long stol(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stol(obj.get_string());
+    return json::stol(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline long long stoll(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stoll(obj.get_string());
+    return json::stoll(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline float stof(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stof(obj.get_string());
+    return json::stof(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline double stod(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stod(obj.get_string());
+    return json::stod(obj);
   }
 
   template < typename Char, typename Traits, typename Allocator >
   inline long double stold(const json::basic_object<Char, Traits, Allocator> &obj)
   {
-    return json::stold(obj.get_string());
+    return json::stold(obj);
   }
 
 }

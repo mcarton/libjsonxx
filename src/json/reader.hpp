@@ -21,8 +21,8 @@
 #define JSON_READER_HPP
 
 #include "json/reader.h"
-#include "json/parsing.h"
 #include "json/char_sequence.h"
+#include "json/parsing.hpp"
 
 namespace json
 {
