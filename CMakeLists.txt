@@ -74,7 +74,7 @@ list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.h)
 if(${CMAKE_COMPILER_IS_GNUCXX})
   message("Compiler: GCC")
   set(COMPILER JSON_GCC)
-  set(FLAGS "-std=c++0x -W -Wall -Wextra")
+  set(FLAGS "-std=c++0x -W -Wall -Wextra -Wno-uninitialized")
   set(FLAGS_RELEASE "${FLAGS} -DNDEBUG -O3")
   set(FLAGS_DEBUG "${FLAGS} -g3")
 
@@ -97,8 +97,8 @@ endif()
 
 set(CMAKE_CXX_FLAGS_RELEASE ${FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${FLAGS_DEBUG})
-#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_RELEASE})
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_RELEASE})
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 
 # ==============================================================================
 # Define config / includes / linkages
@@ -112,19 +112,19 @@ link_directories(${PROJECT_BINARY_DIR})
 # Add targets
 # ==============================================================================
 
-add_library(json++-static SHARED STATIC ${JSON_SOURCES})
+add_library(json++ SHARED STATIC ${JSON_SOURCES})
 
 add_executable(example-object ${JSON_EXAMPLES_DIR}/object.cpp)
-target_link_libraries(example-object json++-static)
+target_link_libraries(example-object json++)
 
 add_executable(example-reader ${JSON_EXAMPLES_DIR}/reader.cpp)
-target_link_libraries(example-reader json++-static)
+target_link_libraries(example-reader json++)
 
 add_executable(example-iterator ${JSON_EXAMPLES_DIR}/iterator.cpp)
-target_link_libraries(example-iterator json++-static)
+target_link_libraries(example-iterator json++)
 
 add_executable(example-test ${JSON_EXAMPLES_DIR}/test.cpp)
-target_link_libraries(example-test json++-static)
+target_link_libraries(example-test json++)
 
 add_executable(example-model ${JSON_EXAMPLES_DIR}/model.cpp)
-target_link_libraries(example-model json++-static)
+target_link_libraries(example-model json++)
