@@ -290,8 +290,6 @@ namespace json
     return s1.compare(s2) >= 0;
   }
 
-  typedef basic_char_sequence<char> char_sequence;
-
   extern template class basic_char_sequence<char>;
 
   template < typename Char, typename Traits >

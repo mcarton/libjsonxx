@@ -44,12 +44,17 @@
 namespace json
 {
 
-  // Forward declaration of the json::basic_object template class and type
-  // definition of the default instantiation.
+  // Forward declaration of classes in the json namespace to reduce includes
+  // dependencies.
 
+  template < typename, typename > class basic_char_sequence;
   template < typename, typename, typename > class basic_object;
 
-  typedef basic_object< char, std::char_traits<char>, std::allocator<char> > object;
+  typedef typename std::char_traits<char> char_traits;
+  typedef typename std::allocator<char> char_allocator;
+
+  typedef basic_char_sequence< char, char_traits > char_sequence;
+  typedef basic_object< char, char_traits, char_allocator> object;
 
 }
 

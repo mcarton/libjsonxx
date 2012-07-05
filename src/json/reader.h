@@ -22,8 +22,6 @@
 
 #include <iterator>
 #include "json/def.h"
-#include "json/parsing.h"
-#include "json/char_sequence.h"
 
 namespace json
 {
@@ -65,8 +63,7 @@ namespace json
    * 
    * @return The function returns the newly created JSON object.
    */
-  template < typename Iterable,
-             typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
+  template < typename Iterable, typename Object = object >
   Object read(Iterable &iterable, typename Object::allocator_type const &a);
 
   /**
@@ -77,8 +74,7 @@ namespace json
    * 
    * @return The function returns the newly created JSON object.
    */
-  template < typename Iterable,
-             typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
+  template < typename Iterable, typename Object = object >
   Object read(Iterable &iterable);
 
   /**

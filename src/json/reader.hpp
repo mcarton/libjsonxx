@@ -21,6 +21,8 @@
 #define JSON_READER_HPP
 
 #include "json/reader.h"
+#include "json/parsing.h"
+#include "json/char_sequence.h"
 
 namespace json
 {
@@ -264,8 +266,7 @@ namespace json
     read_object<decltype(b), Char, Traits, Allocator>(b, e, obj);
   }
 
-  template < typename Iterable,
-             typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
+  template < typename Iterable, typename Object >
   Object read(Iterable &iterable, typename Object::allocator_type const &a)
   {
     typedef typename Object::char_type          char_type;
@@ -276,8 +277,7 @@ namespace json
     return obj;
   }
 
-  template < typename Iterable,
-             typename Object = basic_object< char, std::char_traits<char>, std::allocator<char> > >
+  template < typename Iterable, typename Object >
   Object read(Iterable &iterable)
   {
     typedef typename Object::allocator_type allocator;

@@ -66,7 +66,7 @@ namespace json
    * @note This class is developped for internal purposes only and should not be
    * used outside of the libjson++ implementation.
    */
-  template < typename Char, typename Traits = std::char_traits<Char> >
+  template < typename Char, typename Traits = char_traits >
   class hash_key : public basic_char_sequence<Char, Traits>
   {
 
