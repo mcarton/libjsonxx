@@ -17,6 +17,8 @@ CMakeCache.txt
 cmake_install.cmake
 src/json/def.h
 Makefile
+CTestTestfile.cmake
+Testing/*
 
 # Binaries
-example-*
+bin/*

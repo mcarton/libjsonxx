@@ -66,6 +66,7 @@ list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/types.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.hpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.h)
+list(APPEND JSON_TESTS ${JSON_TESTS_DIR}/test_main.cpp)
 
 # ==============================================================================
 # Detect compiler
@@ -114,17 +115,28 @@ link_directories(${PROJECT_BINARY_DIR})
 
 add_library(json++ SHARED STATIC ${JSON_SOURCES})
 
-add_executable(example-object ${JSON_EXAMPLES_DIR}/object.cpp)
-target_link_libraries(example-object json++)
+#add_executable(bin/example-object ${JSON_EXAMPLES_DIR}/object.cpp)
+#target_link_libraries(bin/example-object json++)
 
-add_executable(example-reader ${JSON_EXAMPLES_DIR}/reader.cpp)
-target_link_libraries(example-reader json++)
+#add_executable(bin/example-reader ${JSON_EXAMPLES_DIR}/reader.cpp)
+#target_link_libraries(bin/example-reader json++)
 
-add_executable(example-iterator ${JSON_EXAMPLES_DIR}/iterator.cpp)
-target_link_libraries(example-iterator json++)
+#add_executable(bin/example-iterator ${JSON_EXAMPLES_DIR}/iterator.cpp)
+#target_link_libraries(bin/example-iterator json++)
 
-add_executable(example-test ${JSON_EXAMPLES_DIR}/test.cpp)
-target_link_libraries(example-test json++)
+#add_executable(bin/example-test ${JSON_EXAMPLES_DIR}/test.cpp)
+#target_link_libraries(bin/example-test json++)
 
-add_executable(example-model ${JSON_EXAMPLES_DIR}/model.cpp)
-target_link_libraries(example-model json++)
+#add_executable(bin/example-model ${JSON_EXAMPLES_DIR}/model.cpp)
+#target_link_libraries(bin/example-model json++)
+
+# ==============================================================================
+# Add tests
+# ==============================================================================
+
+enable_testing()
+
+add_executable(bin/test-char-sequence ${JSON_TESTS_DIR}/test_char_sequence.cpp)
+add_test(json-char-sequence bin/test-char-sequence)
+target_link_libraries(bin/test-char-sequence json++ unit)
+
