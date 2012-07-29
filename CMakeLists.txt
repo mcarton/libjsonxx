@@ -115,6 +115,11 @@ link_directories(${PROJECT_BINARY_DIR})
 # ==============================================================================
 
 add_library(json++ SHARED STATIC ${JSON_SOURCES})
+file(GLOB JSON_INSTALL_HEADERS "${JSON_SOURCES_DIR}/*.h" "${JSON_SOURCES_DIR}/*.hpp")
+list(APPEND JSON_INSTALL_HEADERS ${JSON_SOURCES_DIR}/object)
+list(APPEND JSON_INSTALL_HEADERS ${JSON_SOURCES_DIR}/model)
+install(FILES ${JSON_INSTALL_HEADERS} DESTINATION include/json)
+install(TARGETS json++ ARCHIVE DESTINATION lib)
 
 #add_executable(bin/example-object ${JSON_EXAMPLES_DIR}/object.cpp)
 #target_link_libraries(bin/example-object json++)
