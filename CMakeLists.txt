@@ -135,22 +135,30 @@ add_library(json++ SHARED STATIC ${JSON_SOURCES})
 # Add tests
 # ==============================================================================
 
-enable_testing()
-set(CTEST_OUTPUT_ON_FAILURE)
+if(DEFINED COMPILE_TESTS)
+else()
+  set(COMPILE_TESTS 0)
+endif()
 
-add_executable(bin/test-string ${JSON_TESTS_DIR}/test_string.cpp)
-target_link_libraries(bin/test-string json++ unit)
+if(${COMPILE_TESTS})
+  message("-- Testing enabled")
+  enable_testing()
+  set(CTEST_OUTPUT_ON_FAILURE)
 
-add_executable(bin/test-char-sequence ${JSON_TESTS_DIR}/test_char_sequence.cpp)
-target_link_libraries(bin/test-char-sequence json++ unit)
+  add_executable(bin/test-string ${JSON_TESTS_DIR}/test_string.cpp)
+  target_link_libraries(bin/test-string json++ unit)
 
-add_executable(bin/test-hash-key ${JSON_TESTS_DIR}/test_hash_key.cpp)
-target_link_libraries(bin/test-hash-key json++ unit)
+  add_executable(bin/test-char-sequence ${JSON_TESTS_DIR}/test_char_sequence.cpp)
+  target_link_libraries(bin/test-char-sequence json++ unit)
 
-add_executable(bin/test-hash-map ${JSON_TESTS_DIR}/test_hash_map.cpp)
-target_link_libraries(bin/test-hash-map json++ unit)
+  add_executable(bin/test-hash-key ${JSON_TESTS_DIR}/test_hash_key.cpp)
+  target_link_libraries(bin/test-hash-key json++ unit)
 
-add_test(json-string bin/test-string)
-add_test(json-char-sequence bin/test-char-sequence)
-add_test(json-hash-key bin/test-hash-key)
-add_test(json-hash-map bin/test-hash-map)
+  add_executable(bin/test-hash-map ${JSON_TESTS_DIR}/test_hash_map.cpp)
+  target_link_libraries(bin/test-hash-map json++ unit)
+
+  add_test(json-string bin/test-string)
+  add_test(json-char-sequence bin/test-char-sequence)
+  add_test(json-hash-key bin/test-hash-key)
+  add_test(json-hash-map bin/test-hash-map)
+endif()
