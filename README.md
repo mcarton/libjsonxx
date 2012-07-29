@@ -23,7 +23,7 @@ Building JSON objects
 ---------------------
 
 ```c++
-#include "json/object.h"
+#include <json/object>
 
 int main()
 {
@@ -54,7 +54,7 @@ Reading JSON objects
 
 ```c++
 #include <iostream>
-#include "json/object.h"
+#include <json/object>
 
 int main()
 {
@@ -75,7 +75,7 @@ Writing JSON objects
 
 ```c++
 #include <iostream>
-#include "json/object.h"
+#include <json/object>
 
 int main()
 {
@@ -102,7 +102,7 @@ libjson++ provides the 'model' concept to address this problem, a model is an ob
 a JSON object into a C++ object and vice-versa.
 ```c++
 #include <iostream>
-#include "json/model.h"
+#include <json/model>
 
 struct A
 {
@@ -143,7 +143,7 @@ Sometimes one needs to provide one's own memory allocator, libjson++ follows the
 class is actually a typedef to a template class which makes it easy to customize the memory allocator to be
 used by the object.
 ```c++
-#include "json/object.hpp"
+#include <json/object.hpp>
 
 template < typename T >
 class json_allocator
