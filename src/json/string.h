@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 #include "json/def.h"
 
 namespace json
@@ -79,30 +80,37 @@ namespace json
   }
 
   template < typename Integer, typename Char, typename Traits, typename Allocator >
-  inline void int_to_str(const Integer x,
-			   std::basic_string<Char, Traits, Allocator> &s)
+  inline void unsigned_to_str(const Integer x,
+			      std::basic_string<Char, Traits, Allocator> &s)
   {
-    const Integer div = div_10(x);
+    const Integer div = std::abs(div_10(x));
     if (greater_or_equal_to_one(div))
       {
-	int_to_str(div, s);
+	unsigned_to_str(div, s);
       }
-    s.push_back(int(mod_10(x)) + '0');
+    s.push_back(int(std::abs(mod_10(x))) + '0');
+  }
+
+  template < typename Integer, typename Char, typename Traits, typename Allocator >
+  inline void signed_to_str(const Integer x,
+			    std::basic_string<Char, Traits, Allocator> &s)
+  {
+    if (is_neg(x))
+      {
+	s.push_back('-');
+      }
+    unsigned_to_str(x, s);
   }
 
   template < typename Integer, typename Char, typename Traits, typename Allocator >
   inline std::basic_string<Char, Traits, Allocator>
   itos(Integer x, const Allocator &a)
   {
+    static_assert(std::is_integral<Integer>::value, "json::itos: Integer is not an integral type");
+    static_assert(std::is_signed<Integer>::value, "json::itos: Integer is not a signed type");
     std::basic_string<Char, Traits, Allocator> s ( a );
     s.reserve(30);
-    if (is_neg(x))
-      {
-	s.push_back('-');
-	s.push_back(int(mod_10(x)) + '0');
-	x = div_10(x);
-      }
-    int_to_str(x, s);
+    signed_to_str(x, s);
     return s;
   }
 
@@ -110,9 +118,11 @@ namespace json
   inline std::basic_string<Char, Traits, Allocator>
   utos(const Integer x, const Allocator &a)
   {
+    static_assert(std::is_integral<Integer>::value, "json::utos: Integer is not an integral type");
+    static_assert(std::is_unsigned<Integer>::value, "json::utos: Integer is not an unsigned type");
     std::basic_string<Char, Traits, Allocator> s ( a );
     s.reserve(30);
-    int_to_str(x, s);
+    unsigned_to_str(x, s);
     return s;
   }
 
@@ -145,7 +155,8 @@ namespace json
 
     decimal = std::modf(x, &integral);
 
-    std::basic_string<Char, Traits, Allocator> s ( itos<Float, Char, Traits, Allocator>(integral, a) );
+    std::basic_string<Char, Traits, Allocator> s (a);
+    signed_to_str<Float>(integral, s);
     float_decimal_part_to_str(std::abs(decimal), s);
     return s;
   }

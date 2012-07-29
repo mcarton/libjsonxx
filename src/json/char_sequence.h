@@ -34,6 +34,12 @@ namespace json
     return s.length();
   }
 
+  template < typename Char, typename Traits >
+  inline std::size_t length(const basic_char_sequence<Char, Traits> &s)
+  {
+    return s.length();
+  }
+
   template < typename Char, int N >
   inline std::size_t length(const Char (&)[N])
   {
@@ -298,7 +304,7 @@ namespace json
   operator<<(std::basic_ostream<Char, Traits> &out,
 	     const basic_char_sequence<Char, Traits> &s)
   {
-    return out.write(s.data(), s.length());
+    return out.write((const char *) s.data(), s.length() * sizeof(Char));
   }
 
 }

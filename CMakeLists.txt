@@ -53,9 +53,11 @@ list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/iterator.hpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/iterator.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/model.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/model.h)
+list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/model)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/object.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/object.hpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/object.h)
+list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/object)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/parsing.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/parsing.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/reader.cpp)
@@ -66,7 +68,6 @@ list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/types.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.cpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.hpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/writer.h)
-list(APPEND JSON_TESTS ${JSON_TESTS_DIR}/test_main.cpp)
 
 # ==============================================================================
 # Detect compiler
@@ -135,8 +136,21 @@ add_library(json++ SHARED STATIC ${JSON_SOURCES})
 # ==============================================================================
 
 enable_testing()
+set(CTEST_OUTPUT_ON_FAILURE)
+
+add_executable(bin/test-string ${JSON_TESTS_DIR}/test_string.cpp)
+target_link_libraries(bin/test-string json++ unit)
 
 add_executable(bin/test-char-sequence ${JSON_TESTS_DIR}/test_char_sequence.cpp)
-add_test(json-char-sequence bin/test-char-sequence)
 target_link_libraries(bin/test-char-sequence json++ unit)
 
+add_executable(bin/test-hash-key ${JSON_TESTS_DIR}/test_hash_key.cpp)
+target_link_libraries(bin/test-hash-key json++ unit)
+
+add_executable(bin/test-hash-map ${JSON_TESTS_DIR}/test_hash_map.cpp)
+target_link_libraries(bin/test-hash-map json++ unit)
+
+add_test(json-string bin/test-string)
+add_test(json-char-sequence bin/test-char-sequence)
+add_test(json-hash-key bin/test-hash-key)
+add_test(json-hash-map bin/test-hash-map)

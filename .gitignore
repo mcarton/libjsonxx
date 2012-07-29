@@ -22,3 +22,7 @@ Testing/*
 
 # Binaries
 bin/*
+
+# Emacs temporary files
+*~
+\#*\#
