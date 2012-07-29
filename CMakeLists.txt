@@ -143,7 +143,6 @@ endif()
 if(${COMPILE_TESTS})
   message("-- Testing enabled")
   enable_testing()
-  set(CTEST_OUTPUT_ON_FAILURE)
 
   add_executable(bin/test-string ${JSON_TESTS_DIR}/test_string.cpp)
   target_link_libraries(bin/test-string json++ unit)
