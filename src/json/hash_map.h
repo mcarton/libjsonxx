@@ -302,7 +302,7 @@ namespace json
       {
       }
 
-      basic_iterator(basic_iterator &it):
+      basic_iterator(basic_iterator &&it):
 	_map(std::move(it._map)),
 	_pos(std::move(it._pos)),
 	_cur(std::move(it._cur)),

@@ -79,16 +79,43 @@ namespace json
     return x == 0;
   }
 
+  template < typename T, bool is_signed >
+  struct abs_val;
+
+  template < typename T >
+  struct abs_val<T, true>
+  {
+    static T compute(const T &x)
+    {
+      return std::abs(x);
+    }
+  };
+
+  template < typename T >
+  struct abs_val<T, false>
+  {
+    static T compute(const T &x)
+    {
+      return x;
+    }
+  };
+
+  template < typename T >
+  T abs(const T &x)
+  {
+    return abs_val<T, std::is_signed<T>::value>::compute(x);
+  }
+
   template < typename Integer, typename Char, typename Traits, typename Allocator >
   inline void unsigned_to_str(const Integer x,
 			      std::basic_string<Char, Traits, Allocator> &s)
   {
-    const Integer div = std::abs(div_10(x));
+    const Integer div = abs(div_10(x));
     if (greater_or_equal_to_one(div))
       {
 	unsigned_to_str(div, s);
       }
-    s.push_back(int(std::abs(mod_10(x))) + '0');
+    s.push_back(int(abs(mod_10(x))) + '0');
   }
 
   template < typename Integer, typename Char, typename Traits, typename Allocator >
