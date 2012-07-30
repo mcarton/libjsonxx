@@ -32,9 +32,11 @@
 #define JSON_Unknown            0
 #define JSON_GCC                1
 #define JSON_MSCV		2
+#define JSON_CLANG		3
 #define JSON_COMPILER           @COMPILER@
 #define JSON_COMPILER_IS_GCC    (JSON_COMPILER == JSON_GCC)
 #define JSON_COMPILER_IS_MSCV   (JSON_COMPILER == JSON_MSCV)
+#define JSON_COMPILER_IS_CLANG	(JSON_COMPILER == JSON_CLANG)
 #define JSON_COMPILER_HAS_CONSTEXPR (JSON_COMPILER_IS_GCC)
 
 /**

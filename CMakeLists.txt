@@ -89,8 +89,11 @@ elseif(${MSVC})
   set(COMPILER JSON_MSCV)
 
 else()
-  message("Compiler: Unknown")
-  set(COMPILER JSON_Unkown)
+  message("Compiler: Clang (assumed)")
+  set(COMPILER JSON_CLANG)
+  set(FLAGS "-std=c++11 -stdlib=libc++ -W -Wall -Wextra -fPIC")
+  set(FLAGS_RELEASE "${FLAGS} -DNDEBUG -O3")
+  set(FLAGS_DEBUG "${FLAGS} -g3")
 
 endif()
 

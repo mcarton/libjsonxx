@@ -20,6 +20,7 @@
 #ifndef JSON_READER_H
 #define JSON_READER_H
 
+#include <iosfwd>
 #include <iterator>
 #include "json/def.h"
 

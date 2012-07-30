@@ -20,6 +20,7 @@
 #ifndef JSON_READER_HPP
 #define JSON_READER_HPP
 
+#include <istream>
 #include "json/reader.h"
 #include "json/char_sequence.h"
 #include "json/parsing.hpp"

@@ -20,13 +20,20 @@
 #ifndef JSON_WRITER_HPP
 #define JSON_WRITER_HPP
 
+#include <ostream>
 #include "json/types.h"
-#include "json/parsing.h"
-#include "json/char_sequence.h"
+#include "json/parsing.hpp"
+#include "json/char_sequence.hpp"
 #include "json/writer.h"
 
 namespace json
 {
+
+  template < typename Char, typename Traits >
+  void write_null(std::basic_ostream<Char, Traits> &out)
+  {
+    out << "null";
+  }
 
   template < typename Object, typename Char, typename Traits >
   void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj)
@@ -140,12 +147,6 @@ namespace json
     write_string(out, pair.first);
     out << ':';
     write_object(out, pair.second);
-  }
-
-  template < typename Char, typename Traits >
-  void write_null(std::basic_ostream<Char, Traits> &out)
-  {
-    out << "null";
   }
 
 }
