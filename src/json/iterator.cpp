@@ -28,7 +28,6 @@ namespace json
     throw error("json::iterator::operator++: null iterator cannot be incremented");
   }
 
-#if !JSON_COMPILER_IS_CLANG
   template class iterator<object,
 			  object::object_list::iterator,
 			  object::object_map::iterator>;
@@ -36,6 +35,5 @@ namespace json
   template class iterator<const object,
 			  object::object_list::const_iterator,
 			  object::object_map::const_iterator>;
-#endif // !JSON_COMPILER_IS_CLANG
 
 }
