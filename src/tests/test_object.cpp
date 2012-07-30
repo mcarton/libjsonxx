@@ -96,7 +96,7 @@ TEST(obj, float)
   json::object obj (42.42);
 
   assert_true(json::is_string(obj));
-  assert_equal(obj, "42.42");
+  assert_almost_equal(std::stod(obj.get_string()), 42.42);
 }
 
 TEST(obj, list_iterator)
