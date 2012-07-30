@@ -38,6 +38,7 @@ set(VERSION_PATCH 0)
 # ==============================================================================
 
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/char_sequence.cpp)
+list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/char_sequence.hpp)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/char_sequence.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/def.h)
 list(APPEND JSON_SOURCES ${JSON_SOURCES_DIR}/error.cpp)
@@ -161,8 +162,16 @@ if(${COMPILE_TESTS})
   add_executable(bin/test-hash-map ${JSON_TESTS_DIR}/test_hash_map.cpp)
   target_link_libraries(bin/test-hash-map json++ unit)
 
+  add_executable(bin/test-object ${JSON_TESTS_DIR}/test_object.cpp)
+  target_link_libraries(bin/test-object json++ unit)
+
+  add_executable(bin/test-parsing ${JSON_TESTS_DIR}/test_parsing.cpp)
+  target_link_libraries(bin/test-parsing json++ unit)
+
   add_test(json-string bin/test-string)
   add_test(json-char-sequence bin/test-char-sequence)
   add_test(json-hash-key bin/test-hash-key)
   add_test(json-hash-map bin/test-hash-map)
+  add_test(json-object bin/test-object)
+  add_test(json-object bin/test-parsing)
 endif()

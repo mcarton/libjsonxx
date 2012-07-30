@@ -20,6 +20,7 @@
 #ifndef JSON_OBJECT_HPP
 #define JSON_OBJECT_HPP
 
+#include "json/char_sequence.hpp"
 #include "json/parsing.hpp"
 #include "json/hash_map.hpp"
 #include "json/iterator.hpp"
@@ -459,6 +460,20 @@ namespace json
   }
 
   template < typename Char, typename Traits, typename Allocator >
+  typename basic_object<Char, Traits, Allocator>::size_type
+  basic_object<Char, Traits, Allocator>::size() const
+  {
+    switch (_type)
+      {
+      case type_null:   return 0;
+      case type_string: return 1;
+      case type_list:   return _body.list.size();
+      case type_map:    return _body.map.size();
+      }
+    return 0;
+  }
+
+  template < typename Char, typename Traits, typename Allocator >
   void
   basic_object<Char, Traits, Allocator>::clear()
   {
@@ -781,6 +796,82 @@ namespace json
 		  const basic_object<Char, Traits, Allocator> &obj)
   {
     return obj != str;
+  }
+
+  template < typename Char,
+             typename Traits,
+             typename Allocator >
+  bool operator==(const Char *const str,
+		  const basic_object<Char, Traits, Allocator> &obj)
+  {
+    return obj == make_char_sequence(str);
+  }
+
+  template < typename Char,
+             typename Traits,
+             typename Allocator >
+  bool operator!=(const Char *const str,
+		  const basic_object<Char, Traits, Allocator> &obj)
+  {
+    return obj != make_char_sequence(str);
+  }
+
+  template < typename Char,
+             typename Traits,
+             typename Allocator >
+  bool operator==(const basic_object<Char, Traits, Allocator> &obj,
+		  const Char *const str)
+  {
+    return obj == make_char_sequence(str);
+  }
+
+  template < typename Char,
+             typename Traits,
+             typename Allocator >
+  bool operator!=(const basic_object<Char, Traits, Allocator> &obj,
+		  const Char *const str)
+  {
+    return obj != make_char_sequence(str);
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator==(const std::basic_string<Char, Traits, Allocator1> &str,
+		  const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    return obj == make_char_sequence(str);
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator!=(const std::basic_string<Char, Traits, Allocator1> &str,
+		  const basic_object<Char, Traits, Allocator2> &obj)
+  {
+    return obj != make_char_sequence(str);
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator==(const basic_object<Char, Traits, Allocator1> &obj,
+		  const std::basic_string<Char, Traits, Allocator2> &str)
+  {
+    return obj == make_char_sequence(str);
+  }
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator!=(const basic_object<Char, Traits, Allocator1> &obj,
+		  const std::basic_string<Char, Traits, Allocator2> &str)
+  {
+    return obj != make_char_sequence(str);
   }
 
   template < typename Char, typename Traits, typename Allocator >

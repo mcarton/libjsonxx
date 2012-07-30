@@ -51,3 +51,17 @@ TEST(string, ftos)
   assert_almost_equal(f(42.55), 42.55);
   assert_almost_equal(f(-42.55), -42.55);
 }
+
+TEST(string, to_string)
+{
+  auto fi = [](int i) {
+    return std::stoi(json::to_string< char, std::char_traits<char>, std::allocator<char> >(i));
+  };
+  auto fd = [](double d) {
+    return std::stod(json::to_string< char, std::char_traits<char>, std::allocator<char> >(d));
+  };
+  assert_return(42, fi, 42);
+  assert_return(-42, fi, -42);
+  assert_almost_equal(1e-3, fd(1e-3));
+  assert_almost_equal(-1e-3, fd(-1e-3));
+}

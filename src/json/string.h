@@ -156,7 +156,11 @@ namespace json
     decimal = std::modf(x, &integral);
 
     std::basic_string<Char, Traits, Allocator> s (a);
-    signed_to_str<Float>(integral, s);
+    if (is_neg(x))
+      {
+	s.push_back('-');
+      }
+    unsigned_to_str<Float>(integral, s);
     float_decimal_part_to_str(std::abs(decimal), s);
     return s;
   }

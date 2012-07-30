@@ -382,6 +382,8 @@ namespace json
 
     object_type type() const;
 
+    size_type size() const;
+
     void clear();
 
     void make_null();
@@ -515,6 +517,58 @@ namespace json
   bool operator!=(const basic_char_sequence<Char, Traits> &str,
 		  const basic_object<Char, Traits, Allocator> &obj);
 
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator >
+  bool operator==(const Char *str,
+		  const basic_object<Char, Traits, Allocator> &obj);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator >
+  bool operator!=(const Char *str,
+		  const basic_object<Char, Traits, Allocator> &obj);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator >
+  bool operator==(const basic_object<Char, Traits, Allocator> &obj,
+		  const Char *str);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator >
+  bool operator!=(const basic_object<Char, Traits, Allocator> &obj,
+		  const Char *str);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator==(const std::basic_string<Char, Traits, Allocator1> &str,
+		  const basic_object<Char, Traits, Allocator2> &obj);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator!=(const std::basic_string<Char, Traits, Allocator1> &str,
+		  const basic_object<Char, Traits, Allocator2> &obj);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator==(const basic_object<Char, Traits, Allocator1> &obj,
+		  const std::basic_string<Char, Traits, Allocator2> &str);
+
+  template < typename Char,
+	     typename Traits,
+	     typename Allocator1,
+	     typename Allocator2 >
+  bool operator!=(const basic_object<Char, Traits, Allocator1> &obj,
+		  const std::basic_string<Char, Traits, Allocator2> &str);
+
   inline std::istream &operator>>(std::istream &is, json::object &obj)
   {
     read_object(is, obj);
@@ -526,6 +580,21 @@ namespace json
     write_object(os, obj);
     return os;
   }
+
+  extern template bool operator==(const object &, const object &);
+  extern template bool operator!=(const object &, const object &);
+  extern template bool operator==(const object &, const char_sequence &);
+  extern template bool operator!=(const object &, const char_sequence &);
+  extern template bool operator==(const char_sequence &, const object &);
+  extern template bool operator!=(const char_sequence &, const object &);
+  extern template bool operator==(const object &, const char *);
+  extern template bool operator!=(const object &, const char *);
+  extern template bool operator==(const char *, const object &);
+  extern template bool operator!=(const char *, const object &);
+  extern template bool operator==(const object &, const std::string &);
+  extern template bool operator!=(const object &, const std::string &);
+  extern template bool operator==(const std::string &, const object &);
+  extern template bool operator!=(const std::string &, const object &);
 
 }
 

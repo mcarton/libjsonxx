@@ -18,12 +18,47 @@
  */
 
 #include <ostream>
-#include "json/char_sequence.h"
+#include "json/char_sequence.hpp"
 
 namespace json
 {
 
   template class basic_char_sequence<char>;
+
+  template bool operator==(const char_sequence &, const char_sequence &);
+  template bool operator!=(const char_sequence &, const char_sequence &);
+  template bool operator<(const char_sequence &, const char_sequence &);
+  template bool operator>(const char_sequence &, const char_sequence &);
+  template bool operator<=(const char_sequence &, const char_sequence &);
+  template bool operator>=(const char_sequence &, const char_sequence &);
+
+  template bool operator==(const char_sequence &, const char *);
+  template bool operator!=(const char_sequence &, const char *);
+  template bool operator<(const char_sequence &, const char *);
+  template bool operator>(const char_sequence &, const char *);
+  template bool operator<=(const char_sequence &, const char *);
+  template bool operator>=(const char_sequence &, const char *);
+
+  template bool operator==(const char *, const char_sequence &);
+  template bool operator!=(const char *, const char_sequence &);
+  template bool operator<(const char *, const char_sequence &);
+  template bool operator>(const char *, const char_sequence &);
+  template bool operator<=(const char *, const char_sequence &);
+  template bool operator>=(const char *, const char_sequence &);
+
+  template bool operator==(const char_sequence &, const std::string &);
+  template bool operator!=(const char_sequence &, const std::string &);
+  template bool operator<(const char_sequence &, const std::string &);
+  template bool operator>(const char_sequence &, const std::string &);
+  template bool operator<=(const char_sequence &, const std::string &);
+  template bool operator>=(const char_sequence &, const std::string &);
+
+  template bool operator==(const std::string &, const char_sequence &);
+  template bool operator!=(const std::string &, const char_sequence &);
+  template bool operator<(const std::string &, const char_sequence &);
+  template bool operator>(const std::string &, const char_sequence &);
+  template bool operator<=(const std::string &, const char_sequence &);
+  template bool operator>=(const std::string &, const char_sequence &);
 
   template std::ostream &operator<<(std::ostream &, const char_sequence &);
 

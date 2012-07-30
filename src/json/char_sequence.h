@@ -255,57 +255,177 @@ namespace json
   };
 
   template < typename Char, typename Traits >
-  inline bool operator==(const basic_char_sequence<Char, Traits> &s1,
-			 const basic_char_sequence<Char, Traits> &s2)
-  {
-    return s1.equals(s2);
-  }
+  bool operator==(const basic_char_sequence<Char, Traits> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
 
   template < typename Char, typename Traits >
-  inline bool operator!=(const basic_char_sequence<Char, Traits> &s1,
-			 const basic_char_sequence<Char, Traits> &s2)
-  {
-    return !s1.equals(s2);
-  }
+  bool operator!=(const basic_char_sequence<Char, Traits> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
 
   template < typename Char, typename Traits >
-  inline bool operator<(const basic_char_sequence<Char, Traits> &s1,
-			const basic_char_sequence<Char, Traits> &s2)
-  {
-    return s1.compare(s2) < 0;
-  }
+  bool operator<(const basic_char_sequence<Char, Traits> &s1,
+		 const basic_char_sequence<Char, Traits> &s2);
 
   template < typename Char, typename Traits >
-  inline bool operator>(const basic_char_sequence<Char, Traits> &s1,
-			const basic_char_sequence<Char, Traits> &s2)
-  {
-    return s1.compare(s2) > 0;
-  }
+  bool operator>(const basic_char_sequence<Char, Traits> &s1,
+		 const basic_char_sequence<Char, Traits> &s2);
 
   template < typename Char, typename Traits >
-  inline bool operator<=(const basic_char_sequence<Char, Traits> &s1,
-			 const basic_char_sequence<Char, Traits> &s2)
-  {
-    return s1.compare(s2) <= 0;
-  }
+  bool operator<=(const basic_char_sequence<Char, Traits> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
 
   template < typename Char, typename Traits >
-  inline bool operator>=(const basic_char_sequence<Char, Traits> &s1,
-			 const basic_char_sequence<Char, Traits> &s2)
+  bool operator>=(const basic_char_sequence<Char, Traits> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator==(const basic_char_sequence<Char, Traits> &s1,
+		  const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator!=(const basic_char_sequence<Char, Traits> &s1,
+		  const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator<(const basic_char_sequence<Char, Traits> &s1,
+		 const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator>(const basic_char_sequence<Char, Traits> &s1,
+		 const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator<=(const basic_char_sequence<Char, Traits> &s1,
+		  const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator>=(const basic_char_sequence<Char, Traits> &s1,
+		  const Char *s2);
+
+  template < typename Char, typename Traits >
+  bool operator==(const Char *s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator!=(const Char *s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator<(const Char *s1,
+		 const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator>(const Char *s1,
+		 const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator<=(const Char *s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  bool operator>=(const Char *s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator==(const basic_char_sequence<Char, Traits> &s1,
+		  const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator!=(const basic_char_sequence<Char, Traits> &s1,
+		  const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator<(const basic_char_sequence<Char, Traits> &s1,
+		 const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator>(const basic_char_sequence<Char, Traits> &s1,
+		 const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator<=(const basic_char_sequence<Char, Traits> &s1,
+		  const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator>=(const basic_char_sequence<Char, Traits> &s1,
+		  const std::basic_string<Char, Traits, Allocator> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator==(const std::basic_string<Char, Traits, Allocator> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator!=(const std::basic_string<Char, Traits, Allocator> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator<(const std::basic_string<Char, Traits, Allocator> &s1,
+		 const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator>(const std::basic_string<Char, Traits, Allocator> &s1,
+		 const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator<=(const std::basic_string<Char, Traits, Allocator> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits, typename Allocator >
+  bool operator>=(const std::basic_string<Char, Traits, Allocator> &s1,
+		  const basic_char_sequence<Char, Traits> &s2);
+
+  template < typename Char, typename Traits >
+  std::basic_ostream<Char, Traits> &
+  operator<<(std::basic_ostream<Char, Traits> &out,
+	     const basic_char_sequence<Char, Traits> &s);
+
+  template < typename T >
+  struct char_sequence_builder;
+
+  template < typename T >
+  basic_char_sequence< typename char_sequence_builder<T>::char_type,
+		       typename char_sequence_builder<T>::traits_type >
+  make_char_sequence(const T &s)
   {
-    return s1.compare(s2) >= 0;
+    return char_sequence_builder<T>()(s);
   }
 
   extern template class basic_char_sequence<char>;
 
-  template < typename Char, typename Traits >
-  inline
-  std::basic_ostream<Char, Traits> &
-  operator<<(std::basic_ostream<Char, Traits> &out,
-	     const basic_char_sequence<Char, Traits> &s)
-  {
-    return out.write((const char *) s.data(), s.length() * sizeof(Char));
-  }
+  extern template bool operator==(const char_sequence &, const char_sequence &);
+  extern template bool operator!=(const char_sequence &, const char_sequence &);
+  extern template bool operator<(const char_sequence &, const char_sequence &);
+  extern template bool operator>(const char_sequence &, const char_sequence &);
+  extern template bool operator<=(const char_sequence &, const char_sequence &);
+  extern template bool operator>=(const char_sequence &, const char_sequence &);
+
+  extern template bool operator==(const char_sequence &, const char *);
+  extern template bool operator!=(const char_sequence &, const char *);
+  extern template bool operator<(const char_sequence &, const char *);
+  extern template bool operator>(const char_sequence &, const char *);
+  extern template bool operator<=(const char_sequence &, const char *);
+  extern template bool operator>=(const char_sequence &, const char *);
+
+  extern template bool operator==(const char *, const char_sequence &);
+  extern template bool operator!=(const char *, const char_sequence &);
+  extern template bool operator<(const char *, const char_sequence &);
+  extern template bool operator>(const char *, const char_sequence &);
+  extern template bool operator<=(const char *, const char_sequence &);
+  extern template bool operator>=(const char *, const char_sequence &);
+
+  extern template bool operator==(const char_sequence &, const std::string &);
+  extern template bool operator!=(const char_sequence &, const std::string &);
+  extern template bool operator<(const char_sequence &, const std::string &);
+  extern template bool operator>(const char_sequence &, const std::string &);
+  extern template bool operator<=(const char_sequence &, const std::string &);
+  extern template bool operator>=(const char_sequence &, const std::string &);
+
+  extern template bool operator==(const std::string &, const char_sequence &);
+  extern template bool operator!=(const std::string &, const char_sequence &);
+  extern template bool operator<(const std::string &, const char_sequence &);
+  extern template bool operator>(const std::string &, const char_sequence &);
+  extern template bool operator<=(const std::string &, const char_sequence &);
+  extern template bool operator>=(const std::string &, const char_sequence &);
 
 }
 

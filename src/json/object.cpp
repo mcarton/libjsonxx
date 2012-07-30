@@ -47,35 +47,18 @@ namespace json
   }
 
   template bool operator==(const object &, const object &);
-
   template bool operator!=(const object &, const object &);
-
   template bool operator==(const object &, const char_sequence &);
-
   template bool operator!=(const object &, const char_sequence &);
-
   template bool operator==(const char_sequence &, const object &);
-
   template bool operator!=(const char_sequence &, const object &);
+  template bool operator==(const object &, const char *);
+  template bool operator!=(const object &, const char *);
+  template bool operator==(const char *, const object &);
+  template bool operator!=(const char *, const object &);
+  template bool operator==(const object &, const std::string &);
+  template bool operator!=(const object &, const std::string &);
+  template bool operator==(const std::string &, const object &);
+  template bool operator!=(const std::string &, const object &);
 
 }
-
-namespace std
-{
-
-  template void swap(json::object &, json::object &);
-
-  template int stoi(const json::object &);
-
-  template long stol(const json::object &);
-
-  template long long stoll(const json::object &);
-
-  template float stof(const json::object &);
-
-  template double stod(const json::object &);
-
-  template long double stold(const json::object &);
-
-}
-
