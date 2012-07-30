@@ -168,10 +168,18 @@ if(${COMPILE_TESTS})
   add_executable(bin/test-parsing ${JSON_TESTS_DIR}/test_parsing.cpp)
   target_link_libraries(bin/test-parsing json++ unit)
 
+  add_executable(bin/test-read ${JSON_TESTS_DIR}/test_read.cpp)
+  target_link_libraries(bin/test-read json++ unit)
+
+  add_executable(bin/test-write ${JSON_TESTS_DIR}/test_write.cpp)
+  target_link_libraries(bin/test-write json++ unit)
+
   add_test(json-string bin/test-string)
   add_test(json-char-sequence bin/test-char-sequence)
   add_test(json-hash-key bin/test-hash-key)
   add_test(json-hash-map bin/test-hash-map)
   add_test(json-object bin/test-object)
   add_test(json-object bin/test-parsing)
+  add_test(json-read bin/test-read)
+  add_test(json-write bin/test-write)
 endif()

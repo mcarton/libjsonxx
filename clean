@@ -7,3 +7,4 @@ rm -rf CMakeFiles
 rm -f libjson++.*
 rm -f install_manifest.txt
 rm -f CTestTestfile.cmake
+rm -rf Testing
