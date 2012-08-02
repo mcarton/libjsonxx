@@ -78,14 +78,25 @@ namespace json
     const_reference value() const;
 
   private:
-    unsigned char _memory[sizeof(value_type)];
-
-    template < typename... Args >
-    void construct(Args&&... args)
+    union body
     {
-      new (_memory) value_type (std::forward<Args>(args)...);
-    }
+      bool		dummy;
+      value_type	object;
 
+      body();
+
+      ~body();
+
+      void construct(const value_type &);
+
+      void construct(value_type &&);
+
+      void destroy();
+
+    } _body;
+
+    void construct(const value_type &);
+    void construct(value_type &&);
     void destroy();
     void swap_body_if_busy(hash_slot &);
     void swap_body(hash_slot &);

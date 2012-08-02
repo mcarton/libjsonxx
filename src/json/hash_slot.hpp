@@ -20,10 +20,45 @@
 #ifndef JSON_HASH_SLOT_HPP
 #define JSON_HASH_SLOT_HPP
 
+#include <utility>
 #include "json/hash_slot.h"
 
 namespace json
 {
+
+  template < typename T >
+  hash_slot<T>::body::
+  body():
+    dummy(false)
+  {
+  }
+
+  template < typename T >
+  hash_slot<T>::body::
+  ~body()
+  {
+  }
+
+  template < typename T >
+  void
+  hash_slot<T>::body::construct(const value_type &x)
+  {
+    new (&object) value_type (x);
+  }
+
+  template < typename T >
+  void
+  hash_slot<T>::body::construct(value_type &&x)
+  {
+    new (&object) value_type (std::move(x));
+  }
+
+  template < typename T >
+  void
+  hash_slot<T>::body::destroy()
+  {
+    object.~value_type();
+  }
 
   template < typename T >
   hash_slot<T>::hash_slot():
@@ -134,21 +169,35 @@ namespace json
   typename hash_slot<T>::reference
   hash_slot<T>::value()
   {
-    return * (pointer) _memory;
+    return _body.object;
   }
 
   template < typename T >
   typename hash_slot<T>::const_reference
   hash_slot<T>::value() const
   {
-    return * (const_pointer) _memory;
+    return _body.object;
+  }
+
+  template < typename T >
+  void
+  hash_slot<T>::construct(const value_type &x)
+  {
+    _body.construct(x);
+  }
+
+  template < typename T >
+  void
+  hash_slot<T>::construct(value_type &&x)
+  {
+    _body.construct(std::move(x));
   }
 
   template < typename T >
   void
   hash_slot<T>::destroy()
   {
-    ((pointer)_memory)->~value_type();
+    _body.destroy();
   }
 
   template < typename T >
