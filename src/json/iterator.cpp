@@ -23,11 +23,6 @@
 namespace json
 {
 
-  void error_null_iterator_cannot_be_incremented()
-  {
-    throw error("json::iterator::operator++: null iterator cannot be incremented");
-  }
-
   template class iterator<object,
 			  object::object_list::iterator,
 			  object::object_map::iterator>;

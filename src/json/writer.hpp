@@ -35,33 +35,6 @@ namespace json
     out << "null";
   }
 
-  template < typename Object, typename Char, typename Traits >
-  void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj)
-  {
-    typedef basic_char_sequence<Char, Traits> char_sequence;
-
-    switch (obj.type())
-      {
-
-      case type_string:
-	write_string(out, char_sequence(obj.get_string()));
-	break;
-
-      case type_list:
-	write_list(out, obj.get_list());
-	break;
-
-      case type_map:
-	write_map(out, obj.get_map());
-	break;
-
-      case type_null:
-	write_null(out);
-	break;
-
-      }
-  }
-
   template < typename String, typename Char, typename Traits >
   void write_string(std::basic_ostream<Char, Traits> &out, const String &s)
   {
@@ -119,6 +92,14 @@ namespace json
     out << ']';
   }
 
+  template < typename Pair, typename Char, typename Traits >
+  void write_pair(std::basic_ostream<Char, Traits> &out, const Pair &pair)
+  {
+    write_string(out, pair.first);
+    out << ':';
+    write_object(out, pair.second);
+  }
+
   template < typename Map, typename Char, typename Traits >
   void write_map(std::basic_ostream<Char, Traits> &out, const Map &map)
   {
@@ -141,12 +122,32 @@ namespace json
     out << '}';
   }
 
-  template < typename Pair, typename Char, typename Traits >
-  void write_pair(std::basic_ostream<Char, Traits> &out, const Pair &pair)
+  template < typename Char, typename Traits, typename Allocator >
+  void write_object(std::basic_ostream<Char, Traits> &out,
+		    const basic_object<Char, Traits, Allocator> &obj)
   {
-    write_string(out, pair.first);
-    out << ':';
-    write_object(out, pair.second);
+    typedef basic_char_sequence<Char, Traits> char_sequence;
+
+    switch (obj.type())
+      {
+
+      case type_string:
+	write_string(out, char_sequence(obj.get_string()));
+	break;
+
+      case type_list:
+	write_list(out, obj.get_list());
+	break;
+
+      case type_map:
+	write_map(out, obj.get_map());
+	break;
+
+      case type_null:
+	write_null(out);
+	break;
+
+      }
   }
 
 }

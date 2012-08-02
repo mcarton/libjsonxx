@@ -171,7 +171,7 @@ namespace json
   iterator<Object, ListIterator, MapIterator>::
   swap(iterator &it)
   {
-    iterator_body tmp;
+    body_type tmp;
 
     tmp.create_move(_type, std::move(_body));
       
