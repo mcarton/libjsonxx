@@ -20,36 +20,12 @@
 #ifndef JSON_HASH_KEY_H
 #define JSON_HASH_KEY_H
 
+#include <functional>
 #include "json/def.h"
 #include "json/char_sequence.h"
 
 namespace json
 {
-
-  enum
-    {
-      hash_init = 5381
-    };
-
-  template < typename Char >
-  inline std::size_t hash_one(const Char c, const std::size_t h)
-  {
-    return ((h << 5) + h) ^ c;
-  }
-
-  template < typename Char, typename Traits >
-  inline std::size_t hash(const basic_char_sequence<Char, Traits> &s)
-  {
-    std::size_t h = hash_init;
-    auto it = s.begin();
-    auto jt = s.end();
-    while (it != jt)
-      {
-	h = hash_one(Traits::to_int_type(*it), h);
-	++it;
-      }
-    return h;
-  }
 
   /**
    * @brief Instances of this class are used as keys for json::hash_map.
@@ -66,7 +42,7 @@ namespace json
    * @note This class is developped for internal purposes only and should not be
    * used outside of the libjson++ implementation.
    */
-  template < typename Char, typename Traits = char_traits >
+  template < typename Char, typename Traits = std::char_traits<Char> >
   class hash_key : public basic_char_sequence<Char, Traits>
   {
 
@@ -77,48 +53,17 @@ namespace json
     typedef typename char_sequence_type::char_type	char_type;
     typedef typename char_sequence_type::size_type	size_type;
 
-    hash_key():
-      char_sequence_type(),
-      _hash(hash_init)
-    {
-    }
+    hash_key();
 
-    hash_key(const hash_key &k):
-      char_sequence_type(k),
-      _hash(k._hash)
-    {
-    }
+    hash_key(const char_sequence_type &s);
 
-    hash_key(const char_sequence_type &s):
-      char_sequence_type(s),
-      _hash(json::hash(s))
-    {
-    }
+    hash_key &operator=(const char_sequence_type &s);
 
-    hash_key &operator=(const hash_key &k)
-    {
-      char_sequence_type::operator=(k);
-      _hash = k._hash;
-      return *this;
-    }
+    size_type hash() const;
 
-    hash_key &operator=(const char_sequence_type &s)
-    {
-      char_sequence_type::operator=(s);
-      _hash = json::hash(s);
-      return *this;
-    }
+    size_type compute_hash() const;
 
-    size_type hash() const
-    {
-      return _hash;
-    }
-
-    template < typename _Char, typename _Traits >
-    bool equals(const hash_key<_Char, _Traits> &k) const
-    {
-      return (hash() == k.hash()) && char_sequence_type::equals(k);
-    }
+    bool equals(const hash_key &k) const;
 
   protected:
     size_type _hash;
@@ -126,18 +71,39 @@ namespace json
   };
 
   template < typename Char, typename Traits >
-  inline bool operator==(const hash_key<Char, Traits> &k1,
-			 const hash_key<Char, Traits> &k2)
-  {
-    return k1.equals(k2);
-  }
+  bool operator==(const hash_key<Char, Traits> &k1,
+		  const hash_key<Char, Traits> &k2);
 
   template < typename Char, typename Traits >
-  inline bool operator!=(const hash_key<Char, Traits> &k1,
-			 const hash_key<Char, Traits> &k2)
+  bool operator!=(const hash_key<Char, Traits> &k1,
+		  const hash_key<Char, Traits> &k2);
+
+  extern template class hash_key<char>;
+
+  extern template bool operator==(const hash_key<char> &,
+				  const hash_key<char> &);
+
+  extern template bool operator!=(const hash_key<char> &,
+				  const hash_key<char> &);
+
+}
+
+namespace std
+{
+
+  template < typename Char, typename Traits >
+  struct hash< typename json::hash_key<Char, Traits> >
   {
-    return !k1.equals(k2);
-  }
+
+    typedef typename json::hash_key<Char, Traits>	argument_type;
+    typedef typename std::size_t			return_type;
+
+    return_type operator()(const argument_type &x) const
+    {
+      return x.hash();
+    }
+
+  };
 
 }
 

@@ -36,6 +36,10 @@ namespace json
 				      object_type found,
 				      const char *function);
 
+  void error_json_object_no_such_key(const void *at,
+				     const void *data,
+				     std::size_t size);
+
   template < typename Char, typename Traits, typename Allocator >
   basic_object<Char, Traits, Allocator>::
   basic_object(const allocator_type &a):
@@ -413,7 +417,13 @@ namespace json
 	_body.create_map(_allocator);
 	_type = type_map;
       }
-    return get_map()[key];
+    auto &map = get_map();
+    auto it = map.find(key);
+    if (it == map.end())
+      {
+	it = map.emplace(key, basic_object(get_allocator()));
+      }
+    return it->second;
   }
 
   template < typename Char, typename Traits, typename Allocator >
@@ -421,7 +431,13 @@ namespace json
   basic_object<Char, Traits, Allocator>::
   operator[](const char_sequence_type &key) const
   {
-    return get_map()[key];
+    auto &map = get_map();
+    auto it = map.find(key);
+    if (it == map.end())
+      {
+	error_json_object_no_such_key(this, key.data(), key.size());
+      }
+    return it->second;
   }
 
   template < typename Char, typename Traits, typename Allocator >

@@ -26,7 +26,7 @@ namespace json
 
   template void write_null(std::ostream &);
 
-  template void write_pair(std::ostream &, const object::object_map::pair &);
+  template void write_pair(std::ostream &, const object::object_map::value_type &);
 
   template void write_map(std::ostream &, const object::object_map &);
 

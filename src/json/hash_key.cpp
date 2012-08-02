@@ -17,13 +17,14 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "json/hash_key.h"
+#include "json/hash_key.hpp"
 
 namespace json
 {
 
-  template std::size_t hash_one(char, std::size_t);
+  template class hash_key<char>;
 
-  template std::size_t hash(const char_sequence &);
+  template bool operator==(const hash_key<char> &, const hash_key<char> &);
+  template bool operator!=(const hash_key<char> &, const hash_key<char> &);
 
 }

@@ -26,6 +26,102 @@ namespace json
 {
 
   template < typename Char, typename Traits >
+  basic_char_sequence<Char, Traits>::
+  basic_char_sequence():
+    _str(empty_string<Char, Traits>()),
+    _len(0)
+  {
+  }
+
+  template < typename Char, typename Traits >
+  basic_char_sequence<Char, Traits>::
+  basic_char_sequence(const char_type *str, const size_type len):
+    _str(str),
+    _len(len)
+  {
+  }
+
+  template < typename Char, typename Traits >
+  bool
+  basic_char_sequence<Char, Traits>::
+  equals(const basic_char_sequence &s) const
+  {
+    return (this == &s) || ((size() == s.size()) && (compare(s) == 0));
+  }
+
+  template < typename Char, typename Traits >
+  int
+  basic_char_sequence<Char, Traits>::
+  compare(const basic_char_sequence &s) const
+  {
+    auto it1 = begin();
+    auto it2 = s.begin();
+    auto jt1 = end();
+    auto jt2 = s.end();
+
+    while ((it1 != jt1) && (it2 != jt2))
+      {
+	const auto x1 = jt1 - it1;
+	const auto x2 = jt2 - it2;
+	const auto x3 = (x1 < x2) ? x1 : x2;
+	switch (x3 % 8)
+	  {
+	  case 0: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 7: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 6: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 5: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 4: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 3: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 2: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  case 1: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
+	  }
+      }
+
+  end:
+    return (*it1) - (*it2);
+  }
+
+  template < typename Char, typename Traits >
+  typename basic_char_sequence<Char, Traits>::const_iterator
+  basic_char_sequence<Char, Traits>::
+  begin() const
+  {
+    return _str;
+  }
+
+  template < typename Char, typename Traits >
+  typename basic_char_sequence<Char, Traits>::const_iterator
+  basic_char_sequence<Char, Traits>::
+  end() const
+  {
+    return _str + _len;
+  }
+
+  template < typename Char, typename Traits >
+  typename basic_char_sequence<Char, Traits>::char_type const *
+  basic_char_sequence<Char, Traits>::
+  data() const
+  {
+    return _str;
+  }
+
+  template < typename Char, typename Traits >
+  typename basic_char_sequence<Char, Traits>::size_type
+  basic_char_sequence<Char, Traits>::
+  size() const
+  {
+    return _len;
+  }
+
+  template < typename Char, typename Traits >
+  typename basic_char_sequence<Char, Traits>::size_type
+  basic_char_sequence<Char, Traits>::
+  length() const
+  {
+    return _len;
+  }
+
+  template < typename Char, typename Traits >
   bool operator==(const basic_char_sequence<Char, Traits> &s1,
 		  const basic_char_sequence<Char, Traits> &s2)
   {

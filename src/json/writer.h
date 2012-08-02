@@ -29,6 +29,8 @@ namespace json
   template < typename Object, typename Char, typename Traits >
   void write_object(std::basic_ostream<Char, Traits> &out, const Object &obj);
 
+  extern template void write_object(std::ostream &, const object &);
+
 }
 
 #endif // JSON_WRITER_H

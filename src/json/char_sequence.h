@@ -133,11 +133,7 @@ namespace json
     typedef const char_type *		iterator;
     typedef const char_type *		const_iterator;
 
-    basic_char_sequence():
-      _str(empty_string<Char, Traits>()),
-      _len(0)
-    {
-    }
+    basic_char_sequence();
 
     template < int N >
     basic_char_sequence(const char_type (&s)[N]):
@@ -153,24 +149,7 @@ namespace json
     {
     }
 
-    basic_char_sequence(const basic_char_sequence &s):
-      _str(s._str),
-      _len(s._len)
-    {
-    }
-
-    basic_char_sequence(const char_type *str, const size_type len):
-      _str(str),
-      _len(len)
-    {
-    }
-
-    basic_char_sequence &operator=(const basic_char_sequence &s)
-    {
-      _str = s._str;
-      _len = s._len;
-      return *this;
-    }
+    basic_char_sequence(const char_type *str, size_type len);
 
     template < int N >
     basic_char_sequence &operator=(const char_type (&s)[N])
@@ -188,65 +167,19 @@ namespace json
       return *this;
     }
 
-    template < typename _Char, typename _Traits >
-    bool equals(const basic_char_sequence<_Char, _Traits> &s) const
-    {
-      return (((void *)this) == ((void *)&s)) || ((size() == s.size()) && (compare(s) == 0));
-    }
+    bool equals(const basic_char_sequence &s) const;
 
-    int compare(const basic_char_sequence &s) const
-    {
-      auto it1 = begin();
-      auto it2 = s.begin();
-      auto jt1 = end();
-      auto jt2 = s.end();
+    int compare(const basic_char_sequence &s) const;
 
-      while ((it1 != jt1) && (it2 != jt2))
-	{
-	  const auto x1 = jt1 - it1;
-	  const auto x2 = jt2 - it2;
-	  const auto x3 = (x1 < x2) ? x1 : x2;
-	  switch (x3 % 8)
-	    {
-	    case 0: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 7: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 6: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 5: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 4: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 3: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 2: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    case 1: if ((*it1) != (*it2)) goto end; ++it1, ++it2;
-	    }
-	}
+    const_iterator begin() const;
 
-    end:
-      return (*it1) - (*it2);
-    }
+    const_iterator end() const;
 
-    const_iterator begin() const
-    {
-      return _str;
-    }
+    const char_type *data() const;
 
-    const_iterator end() const
-    {
-      return _str + _len;
-    }
+    size_type size() const;
 
-    const char_type *data() const
-    {
-      return _str;
-    }
-
-    size_type size() const
-    {
-      return _len;
-    }
-
-    size_type length() const
-    {
-      return _len;
-    }
+    size_type length() const;
 
   protected:
     const char_type *	_str;

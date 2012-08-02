@@ -46,6 +46,19 @@ namespace json
     throw error(s.str());
   }
 
+  void error_json_object_no_such_key(const void *const at,
+				     const void *const data,
+				     const std::size_t size)
+  {
+    std::ostringstream s;
+    s << "json::object::operator[]: No such a key, \"";
+    s.write((const char *) data, size);
+    s << "\" (at ";
+    s << at;
+    s << ")";
+    throw error(s.str());
+  }
+
   template bool operator==(const object &, const object &);
   template bool operator!=(const object &, const object &);
   template bool operator==(const object &, const char_sequence &);
