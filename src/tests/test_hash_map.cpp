@@ -39,7 +39,7 @@ TEST(hash_map, insert)
   map.insert("Hello", "World");
 
   assert_not_equal(map.find("Hello"), map.end());
-  //assert_equal(map.find("Hello")->second, "World");
+  assert_equal(map.find("Hello")->second, "World");
   assert_equal(map.size(), 1);
   assert_false(map.empty());
 }
@@ -49,11 +49,11 @@ TEST(hash_map, erase)
   hash_map map;
 
   map.insert("Hello", "World");
-  //map.erase(map.find("Hello"));
+  map.erase(map.find("Hello"));
 
-  //assert_true(map.empty());
-  //assert_equal(map.size(), 0);
-  //assert_equal(map.find("Hello"), map.end());
+  assert_true(map.empty());
+  assert_equal(map.size(), 0);
+  assert_equal(map.find("Hello"), map.end());
 }
 
 TEST(hash_map, clear)
@@ -88,7 +88,7 @@ TEST(hash_map, iterator)
 
   while (it != jt)
     {
-      //assert_one_of(it->first, "A", "B", "C");
+      assert_one_of(it->first, "A", "B", "C");
       ++it;
       ++n;
     }
