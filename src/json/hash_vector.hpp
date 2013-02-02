@@ -205,7 +205,7 @@ namespace json
   hash_vector<T, Allocator>::
   copy(const hash_vector &v)
   {
-    std::copy(v.begin(), v.end(), begin());
+    std::copy_if(v.begin(), v.end(), begin(), [](const slot_type &slot) { return slot.status == slot_type::busy; });
   }
 
   template < typename T, typename Allocator >
