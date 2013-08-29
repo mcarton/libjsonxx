@@ -34,6 +34,11 @@ namespace json
     throw error("json::read_object: invalid non-JSON input");
   }
 
+  void error_invalid_input_unsupported_unicode()
+  {
+    throw error("json::read_object: unicode is supported only with char");
+  }
+
   template void read_object(std::istream &, object &);
 
   object read(const char *str)

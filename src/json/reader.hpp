@@ -20,6 +20,7 @@
 #ifndef JSON_READER_HPP
 #define JSON_READER_HPP
 
+#include <array>
 #include <istream>
 #include "json/reader.h"
 #include "json/char_sequence.h"
@@ -31,6 +32,8 @@ namespace json
   void error_invalid_input_eof();
 
   void error_invalid_input_non_json();
+
+  void error_invalid_input_unsupported_unicode();
 
   template < typename InputIterator >
   void skip_spaces(InputIterator &first, InputIterator &last)
@@ -105,6 +108,80 @@ namespace json
     consume_char(first, last); // consumes ']'
   }
 
+  template < typename InputIterator >
+  int read_unicode_digit(InputIterator& first, InputIterator& last)
+  {
+    if(first != last)
+      {
+        if(*first >= '0' && *first <= '9')
+          {
+            return *first-'0';
+          }
+        else if(*first >= 'a' && *first <= 'f')
+          {
+            return *first-'a'+10;
+          }
+      }
+
+      error_invalid_input_non_json();
+  }
+
+  template < typename InputIterator, typename Char, typename Traits, typename Allocator >
+  struct read_unicode_helper
+  {
+    static void read_unicode(InputIterator& first,
+                         InputIterator &last,
+                         std::basic_string<Char, Traits, Allocator> &str)
+    {
+      error_invalid_input_unsupported_unicode();
+    }
+  };
+
+  template < typename InputIterator, typename Traits, typename Allocator >
+  struct read_unicode_helper< InputIterator, char, Traits, Allocator >
+  {
+    static void read_unicode (InputIterator& first,
+                         InputIterator &last,
+                         std::basic_string<char, Traits, Allocator> &str)
+    {
+      consume_char(first, last); // consumes 'u'
+      int code_point = 0;
+
+      for (int i = 0; i < 3; ++i)
+        {
+          code_point += read_unicode_digit(first, last);
+          code_point <<= 4;
+          consume_char(first, last);
+        }
+
+      // last one should not be consumed
+      code_point += read_unicode_digit(first, last);
+
+      if (code_point < 0x80)
+        {
+          str.push_back(         code_point                  );
+        }
+      else if (code_point < 0x800)
+        {
+          str.push_back(0xC0 + ( code_point            >> 6 ));
+          str.push_back(0x80 + ( code_point & 077           ));
+        }
+      else if (code_point <= 0xFFFF)
+        {
+          str.push_back(0xE0 + ( code_point            >> 12));
+          str.push_back(0x80 + ((code_point & 07777)   >> 6 ));
+          str.push_back(0x80 + ( code_point & 077           ));
+        }
+      else
+        {
+          str.push_back(0xF0 + ( code_point            >> 18));
+          str.push_back(0x80 + ((code_point & 0777777) >> 12));
+          str.push_back(0x80 + ((code_point & 07777)   >> 6 ));
+          str.push_back(0x80 + ( code_point & 077           ));
+        }
+    }
+  };
+
   template < typename InputIterator, typename Char, typename Traits, typename Allocator >
   void read_key(InputIterator &first,
 		       InputIterator &last,
@@ -137,6 +214,7 @@ namespace json
 	      case 'n':  str.push_back('\n'); break;
               case 'r':  str.push_back('\r'); break;
               case 't':  str.push_back('\t'); break;
+              case 'u':  read_unicode_helper<InputIterator, Char, Traits, Allocator>::read_unicode(first, last, str); break;
 	      default:   error_invalid_input_non_json();
 	      }
 	  }
