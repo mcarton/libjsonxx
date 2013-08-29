@@ -209,6 +209,7 @@ namespace json
 	      {
 	      case '"':  str.push_back('"');  break;
 	      case '\\': str.push_back('\\'); break;
+	      case '/':  str.push_back('/');  break;
 	      case 'b':  str.push_back('\b'); break;
 	      case 'f':  str.push_back('\f'); break;
 	      case 'n':  str.push_back('\n'); break;
