@@ -370,7 +370,6 @@ namespace json
   template < typename Object >
   Object read(const char *str, typename Object::allocator_type const &a)
   {
-    typedef typename Object::allocator_type allocator_type;
     const char_sequence cs ( str, std::strlen(str) );
     return read(cs, a);
   }
