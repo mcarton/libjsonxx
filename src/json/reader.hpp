@@ -29,10 +29,13 @@
 namespace json
 {
 
+  [[noreturn]]
   void error_invalid_input_eof();
 
+  [[noreturn]]
   void error_invalid_input_non_json();
 
+  [[noreturn]]
   void error_invalid_input_unsupported_unicode();
 
   template < typename InputIterator >
