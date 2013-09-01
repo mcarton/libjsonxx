@@ -40,8 +40,21 @@ namespace json
   template < typename T, typename Char, typename Traits, typename Allocator >
   hash_map<T, Char, Traits, Allocator>::
   hash_map(const hash_map &map):
-    _table(map._table)
+    _table(map._table.size(), map._table.get_allocator())
   {
+    try
+    {
+      for(auto& i : map._table)
+      {
+        insert(i.first, i.second);
+      }
+    }
+    catch(...)
+    {
+      _table.clear();
+      _table.~table_type();
+      throw;
+    }
   }
 
   template < typename T, typename Char, typename Traits, typename Allocator >
@@ -63,7 +76,8 @@ namespace json
   hash_map<T, Char, Traits, Allocator>::
   operator=(const hash_map &map)
   {
-    _table = map._table;
+    hash_map tmp { map };
+    swap(tmp);
     return *this;
   }
 
@@ -117,7 +131,7 @@ namespace json
 
     std::for_each(begin(), end(), [&](reference x) {
 	const key_type &k = x.first;
-	std::cout << this << ": deletes " << &k << std::endl;
+	std::cout << this << ": deletes " << &k << " : " << (void*)k.data() << ".." << k.size() << std::endl;
 	a.deallocate(const_cast<char_type*>(k.data()), k.size());
       });
 
