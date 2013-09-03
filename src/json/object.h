@@ -370,12 +370,6 @@ namespace json
       return get_string();
     }
 
-    template < typename _Alloc >
-    operator std::basic_string<char_type, traits_type, _Alloc>() const
-    {
-      return get_string();
-    }
-
     void swap(basic_object &obj);
 
     allocator_type get_allocator() const;

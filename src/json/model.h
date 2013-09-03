@@ -633,7 +633,7 @@ namespace json
       auto x = create_field(f);
       try
         {
-          x->name = _field_map.emplace(f.name, x).first;
+          x->name = _field_map.insert(f.name, x)->first;
         }
       catch (...)
         {
