@@ -20,7 +20,6 @@
 #ifndef JSON_OBJECT_H
 #define JSON_OBJECT_H
 
-#include <iostream>
 #include <iosfwd>
 #include <vector>
 #include "json/def.h"
@@ -117,7 +116,6 @@ namespace json
 
       void create_copy(const object_type type, const object_body &body)
       {
-	std::cout << "create copy: " << this << " " << type << std::endl;
 	switch (type)
 	  {
 	  case type_string: create_string(body.string); break;
@@ -155,7 +153,6 @@ namespace json
 
       void destroy(const object_type type)
       {
-	std::cout << "destroy: " << this << " " << type << std::endl;
 	switch (type)
 	  {
 	  case type_string: destroy_string(); break;

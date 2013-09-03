@@ -17,7 +17,6 @@
  * along with Libjson++.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #ifndef JSON_HASH_MAP_HPP
 #define JSON_HASH_MAP_HPP
 
@@ -131,7 +130,6 @@ namespace json
 
     std::for_each(begin(), end(), [&](reference x) {
 	const key_type &k = x.first;
-	std::cout << this << ": deletes " << &k << " : " << (void*)k.data() << ".." << k.size() << std::endl;
 	a.deallocate(const_cast<char_type*>(k.data()), k.size());
       });
 
